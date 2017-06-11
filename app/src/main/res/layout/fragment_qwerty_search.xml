@@ -5,7 +5,7 @@
               android:background="@color/white"
               android:orientation="vertical">
 
-    <com.handsomezhou.xdesktophelper.view.SearchBox
+    <com.jchanghong.appsearch.view.SearchBox
         android:id="@+id/search_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

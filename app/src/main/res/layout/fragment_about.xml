@@ -5,7 +5,7 @@
               android:background="@color/white"
               android:orientation="vertical">
 
-    <com.handsomezhou.xdesktophelper.view.NavigationBarLayout
+    <com.jchanghong.appsearch.view.NavigationBarLayout
         android:id="@+id/navigation_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

@@ -1,4 +1,4 @@
-package com.handsomezhou.xdesktophelper;
+package com.jchanghong.appsearch;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.handsomezhou.xdesktophelper", appContext.getPackageName());
+        assertEquals("com.jchanghong.appsearch", appContext.getPackageName());
     }
 }

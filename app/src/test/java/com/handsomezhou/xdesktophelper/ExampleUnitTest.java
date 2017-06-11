@@ -1,4 +1,4 @@
-package com.handsomezhou.xdesktophelper;
+package com.jchanghong.appsearch;
 
 import org.junit.Test;
 

@@ -36,7 +36,7 @@
             android:layout_gravity="bottom"
             android:orientation="vertical" >
 
-            <com.handsomezhou.xdesktophelper.view.T9TelephoneDialpadView
+            <com.jchanghong.appsearch.view.T9TelephoneDialpadView
                 android:id="@+id/t9_telephone_dialpad_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
