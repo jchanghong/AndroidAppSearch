@@ -39,8 +39,6 @@ import com.jchanghong.appsearch.util.ViewUtil;
 import com.jchanghong.appsearch.util.XfyunErrorCodeUtil;
 import com.jchanghong.appsearch.view.CustomViewPager;
 import com.jchanghong.appsearch.view.TopTabView;
-import com.jchanghong.appsearch.xfyun.setting.IatSettings;
-import com.jchanghong.appsearch.xfyun.util.JsonParser;
 //import com.iflytek.cloud.ErrorCode;
 //import com.iflytek.cloud.InitListener;
 //import com.iflytek.cloud.RecognizerListener;

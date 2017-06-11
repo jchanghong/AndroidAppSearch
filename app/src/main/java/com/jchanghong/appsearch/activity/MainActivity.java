@@ -32,15 +32,15 @@ public class MainActivity extends BaseSingleFragmentActivity implements
 	private static final String TAG = "MainActivity";
 	private Context mContext;
 	private MainFragment mMainFragment;
-	private ResideMenu mResideMenu;
-	private List<MenuItem> mMenuItems;
+//	private ResideMenu mResideMenu;
+//	private List<MenuItem> mMenuItems;
 	private static final int DOUBLE_CLICK_EXIT_TIME_INTERVAL_MILLIS = 2000;// ms
 	private static long mBackPressedTimeMillis;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		mContext = this;
-		setFullScreen(false);
+		setFullScreen(true);
 		initData();
 		initView();
 		initListener();
@@ -73,33 +73,34 @@ public class MainActivity extends BaseSingleFragmentActivity implements
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
+		return super.dispatchTouchEvent(ev);
 
-		return mResideMenu.dispatchTouchEvent(ev);
+//		return mResideMenu.dispatchTouchEvent(ev);
 	}
 
 	@Override
 	public boolean onKeyDown(int keycode, KeyEvent e) {
-		switch (keycode) {
-		case KeyEvent.KEYCODE_MENU:
-			enterMenu();
-			return true;
-		}
+//		switch (keycode) {
+//		case KeyEvent.KEYCODE_MENU:
+//			enterMenu();
+//			return true;
+//		}
 
 		return super.onKeyDown(keycode, e);
 	}
 
 	@Override
 	public void onBackPressed() {
-		if (mResideMenu.isOpened()) {
-			mResideMenu.closeMenu();
-		} else {
-			if (SettingsHelper.getInstance().isExitAppPrompt() ==false) {
+//		if (mResideMenu.isOpened()) {
+//			mResideMenu.closeMenu();
+//		} else {
+//			if (SettingsHelper.getInstance().isExitAppPrompt() ==false) {
 				runInBackgroud();
-			} else {
-				doubleClickExit();
-			}
+//			} else {
+//				doubleClickExit();
+//			}
 
-		}
+//		}
 
 	}
 
@@ -126,46 +127,46 @@ public class MainActivity extends BaseSingleFragmentActivity implements
 
 	}
 
-	public ResideMenu getResideMenu() {
-		return mResideMenu;
-	}
+//	public ResideMenu getResideMenu() {
+////		return mResideMenu;
+//	}
 
 	public void setResideMenu(ResideMenu resideMenu) {
-		mResideMenu = resideMenu;
+//		mResideMenu = resideMenu;
 	}
 
 	private void initData() {
-		mMenuItems = new ArrayList<MenuItem>();
-		int titleColor = mContext.getResources().getColor(R.color.white);
-		/* Start: home page */
-		MenuItem homePageMenuItem = new MenuItem(
-				mContext.getString(R.string.home_page), titleColor,
-				R.mipmap.home_page);
-		mMenuItems.add(MenuItemIndex.HOME_PAGE, homePageMenuItem);
-		/* End: home page */
-
-		/* Start: settings */
-		MenuItem settingsMenuItem = new MenuItem(
-				mContext.getString(R.string.settings), titleColor,
-				R.mipmap.settings);
-		mMenuItems.add(MenuItemIndex.SETTINGS, settingsMenuItem);
-		/* End: settings */
-
-		/* Start: about */
-		MenuItem aboutMenuItem = new MenuItem(
-				mContext.getString(R.string.about), titleColor,
-				R.mipmap.about);
-		mMenuItems.add(MenuItemIndex.ABOUT, aboutMenuItem);
-		/* End: about */
-
-		/* start: more */
-		/*
-		 * MenuItem moreMenuItem = new MenuItem(
-		 * mContext.getString(R.string.more), titleColor, R.drawable.more);
-		 * mMenuItems.add(MenuItemIndex.MORE, moreMenuItem);
-		 */
-		/* end: more */
-		return;
+//		mMenuItems = new ArrayList<MenuItem>();
+//		int titleColor = mContext.getResources().getColor(R.color.white);
+//		/* Start: home page */
+//		MenuItem homePageMenuItem = new MenuItem(
+//				mContext.getString(R.string.home_page), titleColor,
+//				R.mipmap.home_page);
+//		mMenuItems.add(MenuItemIndex.HOME_PAGE, homePageMenuItem);
+//		/* End: home page */
+//
+//		/* Start: settings */
+//		MenuItem settingsMenuItem = new MenuItem(
+//				mContext.getString(R.string.settings), titleColor,
+//				R.mipmap.settings);
+//		mMenuItems.add(MenuItemIndex.SETTINGS, settingsMenuItem);
+//		/* End: settings */
+//
+//		/* Start: about */
+//		MenuItem aboutMenuItem = new MenuItem(
+//				mContext.getString(R.string.about), titleColor,
+//				R.mipmap.about);
+//		mMenuItems.add(MenuItemIndex.ABOUT, aboutMenuItem);
+//		/* End: about */
+//
+//		/* start: more */
+//		/*
+//		 * MenuItem moreMenuItem = new MenuItem(
+//		 * mContext.getString(R.string.more), titleColor, R.drawable.more);
+//		 * mMenuItems.add(MenuItemIndex.MORE, moreMenuItem);
+//		 */
+//		/* end: more */
+//		return;
 	}
 
 	private void initView() {
@@ -181,46 +182,46 @@ public class MainActivity extends BaseSingleFragmentActivity implements
 	private void setUpMenu() {
 
 		// attach to current activity;
-		mResideMenu = new ResideMenu(this);
-		mResideMenu.setUse3D(false);
-		mResideMenu.setBackground(R.color.green);
-		mResideMenu.attachToActivity(this);
-		mResideMenu.setMenuListener(menuListener);
-		// valid scale factor is between 0.0f and 1.0f. leftmenu'width is
-		// 150dip.
-		mResideMenu.setScaleValue(0.6f);
-
-		// create menu items;
-		MenuPositionMode menuPositionMode = MenuPositionModeSp
-				.getMenuPositionMode();
-		createMenuItems(menuPositionMode);
+//		mResideMenu = new ResideMenu(this);
+//		mResideMenu.setUse3D(false);
+//		mResideMenu.setBackground(R.color.green);
+//		mResideMenu.attachToActivity(this);
+//		mResideMenu.setMenuListener(menuListener);
+//		// valid scale factor is between 0.0f and 1.0f. leftmenu'width is
+//		// 150dip.
+//		mResideMenu.setScaleValue(0.6f);
+//
+//		// create menu items;
+//		MenuPositionMode menuPositionMode = MenuPositionModeSp
+//				.getMenuPositionMode();
+//		createMenuItems(menuPositionMode);
 	}
 
 	private void createMenuItems(MenuPositionMode menuPositionMode) {
-		int resideMenuDirection = ResideMenu.DIRECTION_LEFT;
-		int disableDirection = ResideMenu.DIRECTION_RIGHT;
-
-		if (menuPositionMode == MenuPositionMode.RIGHT) {
-			resideMenuDirection = ResideMenu.DIRECTION_RIGHT;
-			disableDirection = ResideMenu.DIRECTION_LEFT;
-		} else {
-			resideMenuDirection = ResideMenu.DIRECTION_LEFT;
-			disableDirection = ResideMenu.DIRECTION_RIGHT;
-		}
-
-		// create menu items;
-		for (int i = 0; i < mMenuItems.size(); i++) {
-			ResideMenuItem item = new ResideMenuItem(this, mMenuItems.get(i)
-					.getIcon(), mMenuItems.get(i).getTitle(), mMenuItems.get(i)
-					.getTitleColor());
-			item.setOnClickListener(this);
-			item.setTag(i);
-			mResideMenu.addMenuItem(item, resideMenuDirection);
-
-		}
-
-		// You can disable a direction by setting ->
-		mResideMenu.setSwipeDirectionDisable(disableDirection);
+//		int resideMenuDirection = ResideMenu.DIRECTION_LEFT;
+//		int disableDirection = ResideMenu.DIRECTION_RIGHT;
+//
+//		if (menuPositionMode == MenuPositionMode.RIGHT) {
+//			resideMenuDirection = ResideMenu.DIRECTION_RIGHT;
+//			disableDirection = ResideMenu.DIRECTION_LEFT;
+//		} else {
+//			resideMenuDirection = ResideMenu.DIRECTION_LEFT;
+//			disableDirection = ResideMenu.DIRECTION_RIGHT;
+//		}
+//
+//		// create menu items;
+//		for (int i = 0; i < mMenuItems.size(); i++) {
+//			ResideMenuItem item = new ResideMenuItem(this, mMenuItems.get(i)
+//					.getIcon(), mMenuItems.get(i).getTitle(), mMenuItems.get(i)
+//					.getTitleColor());
+//			item.setOnClickListener(this);
+//			item.setTag(i);
+//			mResideMenu.addMenuItem(item, resideMenuDirection);
+//
+//		}
+//
+//		// You can disable a direction by setting ->
+//		mResideMenu.setSwipeDirectionDisable(disableDirection);
 	}
 
 	private ResideMenu.OnMenuListener menuListener = new ResideMenu.OnMenuListener() {
@@ -266,29 +267,29 @@ public class MainActivity extends BaseSingleFragmentActivity implements
 	}
 
 	private void enterMenu() {
-		if (mResideMenu.isOpened()) {
-			mResideMenu.closeMenu();
-		} else {
-			MenuPositionMode menuPositionMode = SettingsHelper.getInstance()
-					.getMenuPositionMode();
-			if (menuPositionMode == MenuPositionMode.RIGHT) {
-				mResideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
-			} else {
-				mResideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
-			}
-		}
+//		if (mResideMenu.isOpened()) {
+//			mResideMenu.closeMenu();
+//		} else {
+//			MenuPositionMode menuPositionMode = SettingsHelper.getInstance()
+//					.getMenuPositionMode();
+//			if (menuPositionMode == MenuPositionMode.RIGHT) {
+//				mResideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
+//			} else {
+//				mResideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
+//			}
+//		}
 	}
 
 	private void enterHomePage() {
-		if (mResideMenu.isOpened()) {
-			mResideMenu.closeMenu();
-		}
+//		if (mResideMenu.isOpened()) {
+//			mResideMenu.closeMenu();
+//		}
 		return;
 	}
 
 	private void enterSettings() {
-		Intent intent = new Intent(getContext(), SettingsActivity.class);
-		startActivity(intent);
+//		Intent intent = new Intent(getContext(), SettingsActivity.class);
+//		startActivity(intent);
 	}
 
 
@@ -299,7 +300,7 @@ public class MainActivity extends BaseSingleFragmentActivity implements
 
 
 	private void enterAbout() {
-		Intent intent = new Intent(getContext(), AboutActivity.class);
-		startActivity(intent);
+//		Intent intent = new Intent(getContext(), AboutActivity.class);
+//		startActivity(intent);
 	}
 }
