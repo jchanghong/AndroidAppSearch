@@ -1,7 +1,6 @@
 package com.handsomezhou.xdesktophelper.xfyun.util;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,7 +8,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.iflytek.cloud.SpeechUtility;
+//import android.app.AlertDialog;
+
+//import com.iflytek.cloud.SpeechUtility;
 
 
 /**
@@ -30,9 +31,9 @@ public class ApkInstaller {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				String url = SpeechUtility.getUtility().getComponentUrl();
-				String assetsApk="SpeechService.apk";
-				processInstall(mActivity, url,assetsApk);
+//				String url = SpeechUtility.getUtility().getComponentUrl();
+//				String assetsApk="SpeechService.apk";
+//				processInstall(mActivity, url,assetsApk);
 			}
 		});
 		builder.setNegativeButton("残忍拒绝", new OnClickListener() {
@@ -42,7 +43,6 @@ public class ApkInstaller {
 			}
 		});
 		builder.create().show();
-		return;
 	}
 	/**
 	 * 如果服务组件没有安装打开语音服务组件下载页面，进行下载后安装。
