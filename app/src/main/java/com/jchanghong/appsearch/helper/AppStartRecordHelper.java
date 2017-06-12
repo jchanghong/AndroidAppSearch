@@ -1,9 +1,6 @@
 package com.jchanghong.appsearch.helper;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -13,12 +10,10 @@ import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppStartRecord;
 import com.jchanghong.appsearch.model.LoadStatus;
-import com.jchanghong.appsearch.util.AppCommonWeightsUtil;
-
 
 
 public class AppStartRecordHelper {
-    public static LinkedList mrecords = null;
+    public  LinkedList<String> mrecords = null;
     public static AppStartRecordHelper mInstance=new AppStartRecordHelper();
     public List<AppStartRecord> mAppStartRecords;
     public LoadStatus mAppStartRecordsLoadStatus;
@@ -37,21 +32,11 @@ public class AppStartRecordHelper {
         initAppStartRecordHelper();
     }
     
-    public LoadStatus getAppStartRecordsLoadStatus() {
-        return mAppStartRecordsLoadStatus;
-    }
 
     public void setAppStartRecordsLoadStatus(LoadStatus appStartRecordsLoadStatus) {
         mAppStartRecordsLoadStatus = appStartRecordsLoadStatus;
     }
 
-    public OnAppStartRecordLoad getOnAppStartRecordLoad() {
-        return mOnAppStartRecordLoad;
-    }
-
-    public void setOnAppStartRecordLoad(OnAppStartRecordLoad onAppStartRecordLoad) {
-        mOnAppStartRecordLoad = onAppStartRecordLoad;
-    }
 
     
     public void initAppStartRecordHelper(){
@@ -89,33 +74,7 @@ public class AppStartRecordHelper {
         
         return true;
     }
-    
-    public boolean parseAppStartRecord(){
-        boolean parseSuccess=false;
-        
-        do{
-            AppInfo appInfo=null;
-            long currentTimeMs=System.currentTimeMillis();
-            if(mAppStartRecords.size()<=0){
-                parseSuccess=false;
-                break;
-            }
-            
-            for(AppStartRecord asr:mAppStartRecords){
-                if(true==AppInfoHelper.mInstance.mBaseAllAppInfosHashMap.containsKey(asr.getKey())){
-                    appInfo= AppInfoHelper.mInstance.mBaseAllAppInfosHashMap.get(asr.getKey());
-                    appInfo.setCommonWeights(appInfo.getCommonWeights()+AppCommonWeightsUtil.getCommonWeights(currentTimeMs, asr.getStartTime()));
-                }
-            }
-            Collections.sort(AppInfoHelper.mInstance.mBaseAllAppInfos, AppInfo.mSortByDefault);
-           /* for(int i=0; i<AppInfoHelper.mInstance.getBaseAllAppInfos().size() ; i++){
-                Log.i(TAG, AppInfoHelper.mInstance.getBaseAllAppInfos().get(i).getLabel()+":"+AppInfoHelper.mInstance.getBaseAllAppInfos().get(i).getCommonWeights());
-            }*/
-            parseSuccess=true;
-        }while(false);
-        
-        return parseSuccess;
-    }
+
     public boolean isAppStartRecordLoading(){
         return ((null!=mLoadAppStartRecordTask)&&(mLoadAppStartRecordTask.getStatus()==Status.RUNNING));
 
@@ -134,7 +93,6 @@ public class AppStartRecordHelper {
             }
             return;
         }
-        
         mAppStartRecords.clear();
         mAppStartRecords.addAll(appStartRecords);
         
@@ -142,8 +100,13 @@ public class AppStartRecordHelper {
         if(null!=mOnAppStartRecordLoad){
             mOnAppStartRecordLoad.onAppStartRecordSuccess();
         }
-        
-      
-    
+        mrecords = new LinkedList<>();
+        LinkedHashSet<String> set = new LinkedHashSet<>();
+        for (AppStartRecord mAppStartRecord : mAppStartRecords) {
+            set.add(mAppStartRecord.getKey());
+        }
+        for (String s : set) {
+            mrecords.addLast(s);
+        }
     }
 }

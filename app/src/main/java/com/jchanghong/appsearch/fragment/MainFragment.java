@@ -106,11 +106,7 @@ public 	MainFragment() {
 	}
 	@Override
 	public void onAppInfoLoadSuccess() {
-	}
-	@Override
-	public void onloadALL(List<AppInfo> all) {
-		refreshT9SearchGv();
-		System.out.println("-----------"+all.size());
+	refreshT9SearchGv();
 	}
 
 	@Override

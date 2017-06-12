@@ -1,7 +1,6 @@
 
 package com.jchanghong.appsearch.util;
 
-import java.util.Collections;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,13 +12,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 import com.jchanghong.appsearch.R;
 import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.helper.AppInfoHelper;
+import com.jchanghong.appsearch.helper.AppStartRecordHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppStartRecord;
+
+import java.util.Collections;
 
 public class AppUtil {
     private static final String TAG = "AppUtil";
@@ -88,21 +89,16 @@ public class AppUtil {
     }
 
     /**
-     * start app via appinfo
+     * start app via appinfo入口
      * 
      * @param context
      * @param appInfo
      */
     public static boolean startApp(Context context, AppInfo appInfo) {
         boolean startAppSuccess = false;
-        do {
             if ((null == context) || (null == appInfo)) {
-                startAppSuccess = false;
-                break;
-
+                return false;
             }
-
-            if (null != appInfo) {
 
                 if (!appInfo.getPackageName().equals(context.getPackageName())) {
                     startAppSuccess = AppUtil.startApp(context, appInfo.getPackageName(),
@@ -111,22 +107,23 @@ public class AppUtil {
                         Toast.makeText(context, R.string.app_can_not_be_launched_directly,
                                 Toast.LENGTH_SHORT).show();
                     } else {
-                        if (true == true) {
                             long startTimeMs = System.currentTimeMillis();
                             AppStartRecord appStartRecord = new AppStartRecord(appInfo.getKey(),
                                     startTimeMs);
                             AppStartRecordDataBaseHelper.mInstance.insert(appStartRecord);
+                        if (AppStartRecordHelper.mInstance.mrecords != null) {
+                            AppStartRecordHelper.mInstance.mrecords.addLast(appInfo.getKey());
+                        }
                             AppInfo ai = AppInfoHelper.mInstance.mBaseAllAppInfosHashMap
                                     .get(appInfo.getKey());
                             if (null != ai) {
                                 ai.setCommonWeights(ai.getCommonWeights()
                                         + AppCommonWeightsUtil.getCommonWeights(startTimeMs));
-                                Log.i(TAG, ai.getPackageName() + ":" + ai.getCommonWeights());
+//                                Log.i(TAG, ai.getPackageName() + ":" + ai.getCommonWeights());
                                 Collections.sort(AppInfoHelper.mInstance.mBaseAllAppInfos,
                                         AppInfo.mSortByDefault);
 
                             }
-                        }
 
                     }
                 } else {
@@ -134,8 +131,6 @@ public class AppUtil {
                             .show();
                 }
 
-            }
-        } while (false);
 
         return startAppSuccess;
     }

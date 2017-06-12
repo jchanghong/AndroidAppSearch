@@ -9,16 +9,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import com.jchanghong.appsearch.application.XDesktopHelperApplication;
 import com.jchanghong.appsearch.fragment.MainFragment;
+import com.jchanghong.appsearch.helper.AppInfoHelper;
+import com.jchanghong.appsearch.helper.AppStartRecordHelper;
 import com.jchanghong.appsearch.service.XDesktopHelperService;
 
 @SuppressLint("ResourceAsColor")
 public class MainActivity extends BaseSingleFragmentActivity
 		 {
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		XDesktopHelperService.startService(getApplicationContext());
+		if (AppStartRecordHelper.mInstance.mrecords == null) {
+			AppStartRecordHelper.mInstance.startLoadAppStartRecord();
+		}
+		if (!AppInfoHelper.mInstance.loaded()) {
+			XDesktopHelperService.startService(getApplicationContext());
+		}
 		super.onCreate(savedInstanceState);
 	}
 
@@ -41,7 +47,5 @@ public class MainActivity extends BaseSingleFragmentActivity
 			      }
 	private void runInBackgroud() {
 		moveTaskToBack(true);
-		XDesktopHelperService.startService(getApplicationContext());
-
 	}
 }
