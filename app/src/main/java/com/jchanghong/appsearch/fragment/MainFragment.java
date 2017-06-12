@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -14,15 +15,12 @@ import android.widget.GridView;
 import com.jchanghong.appsearch.R;
 import com.jchanghong.appsearch.adapter.AppInfoAdapter;
 import com.jchanghong.appsearch.helper.AppInfoHelper;
-import com.jchanghong.appsearch.helper.AppStartRecordHelper;
 import com.jchanghong.appsearch.model.AppInfo;
-import com.jchanghong.appsearch.model.AppStartRecord;
 import com.jchanghong.appsearch.util.AppUtil;
 import com.jchanghong.appsearch.util.ViewUtil;
 import com.jchanghong.appsearch.view.T9TelephoneDialpadView;
 import com.jchanghong.appsearch.view.T9TelephoneDialpadView.OnT9TelephoneDialpadView;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 
 public class MainFragment extends Fragment implements

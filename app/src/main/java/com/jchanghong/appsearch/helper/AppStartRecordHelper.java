@@ -2,6 +2,7 @@ package com.jchanghong.appsearch.helper;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -17,6 +18,7 @@ import com.jchanghong.appsearch.util.AppCommonWeightsUtil;
 
 
 public class AppStartRecordHelper {
+    public static LinkedList mrecords = null;
     public static AppStartRecordHelper mInstance=new AppStartRecordHelper();
     public List<AppStartRecord> mAppStartRecords;
     public LoadStatus mAppStartRecordsLoadStatus;

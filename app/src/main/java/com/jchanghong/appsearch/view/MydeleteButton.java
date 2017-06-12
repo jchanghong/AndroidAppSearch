@@ -35,6 +35,7 @@ public class MydeleteButton extends View {
         int centerY = getTop() + r;
 
         Paint paint = new Paint();
+        paint.setStrokeWidth(4);
         paint.setColor(Color.BLACK);
         canvas.drawLine(r4,r4,r-r4,r-r4,paint);
         canvas.drawLine(r4,r-r4,r-r4,r4,paint);

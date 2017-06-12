@@ -87,6 +87,12 @@ public class T9TelephoneDialpadView extends LinearLayout implements
 					mT9InputEt.setSelection(inputStr.length());
 			}
 		});
+		mT9InputEt.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
 	}
 
 	@Override

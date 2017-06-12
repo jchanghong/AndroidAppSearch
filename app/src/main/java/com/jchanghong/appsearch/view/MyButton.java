@@ -8,21 +8,19 @@ import android.widget.TextView;
 import com.jchanghong.appsearch.R;
 
 public class MyButton extends LinearLayout{
-
-
     private TextView textViewnumber;
     private TextView textchars;
     public String tag;
     public MyButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-            LinearLayout root;
- tag=  attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "tag");
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LinearLayout root;
         root = (LinearLayout) inflater.inflate(R.layout.mybutton,
                 this);
         textViewnumber = (TextView) root.findViewById(R.id.textview_number);
         textchars = (TextView) root.findViewById(R.id.textView_chars);
+        tag=  attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "tag");
         init();
     }
 
