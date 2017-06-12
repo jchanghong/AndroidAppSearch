@@ -44,8 +44,8 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
 			view = LayoutInflater.from(mContext).inflate(mTextViewResourceId,
 					null);
 			viewHolder = new ViewHolder();
-			viewHolder.mAlphabetTv = (TextView) view
-					.findViewById(R.id.alphabet_text_view);
+//			viewHolder.mAlphabetTv = (TextView) view
+//					.findViewById(R.id.alphabet_text_view);
 			viewHolder.mIconIv = (ImageView) view
 					.findViewById(R.id.icon_image_view);
 			viewHolder.mLabelTv = (TextView) view
