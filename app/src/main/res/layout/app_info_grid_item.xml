@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="alphabet"
             android:layout_gravity="start"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
     </LinearLayout>
 
     <LinearLayout
