@@ -29,6 +29,10 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
 		mAppInfos = appInfos;
 
 	}
+	public void setmAppInfos(List<AppInfo> mAppInfos) {
+		this.mAppInfos = mAppInfos;
+		notifyDataSetChanged();
+	}
 
 	@SuppressLint("NewApi")
 	@Override

@@ -115,14 +115,14 @@ public class AppUtil {
                             long startTimeMs = System.currentTimeMillis();
                             AppStartRecord appStartRecord = new AppStartRecord(appInfo.getKey(),
                                     startTimeMs);
-                            AppStartRecordDataBaseHelper.getInstance().insert(appStartRecord);
-                            AppInfo ai = AppInfoHelper.getInstance().getBaseAllAppInfosHashMap()
+                            AppStartRecordDataBaseHelper.mInstance.insert(appStartRecord);
+                            AppInfo ai = AppInfoHelper.mInstance.mBaseAllAppInfosHashMap
                                     .get(appInfo.getKey());
                             if (null != ai) {
                                 ai.setCommonWeights(ai.getCommonWeights()
                                         + AppCommonWeightsUtil.getCommonWeights(startTimeMs));
                                 Log.i(TAG, ai.getPackageName() + ":" + ai.getCommonWeights());
-                                Collections.sort(AppInfoHelper.getInstance().getBaseAllAppInfos(),
+                                Collections.sort(AppInfoHelper.mInstance.mBaseAllAppInfos,
                                         AppInfo.mSortByDefault);
 
                             }

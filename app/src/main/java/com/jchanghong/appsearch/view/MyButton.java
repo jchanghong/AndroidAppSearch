@@ -9,12 +9,13 @@ import com.jchanghong.appsearch.R;
 
 public class MyButton extends LinearLayout{
 
-  public   LinearLayout root;
-    public TextView textViewnumber;
-    public TextView textchars;
+
+    private TextView textViewnumber;
+    private TextView textchars;
     public String tag;
     public MyButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+            LinearLayout root;
  tag=  attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "tag");
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

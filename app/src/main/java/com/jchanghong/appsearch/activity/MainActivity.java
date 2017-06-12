@@ -7,25 +7,19 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import com.jchanghong.appsearch.application.XDesktopHelperApplication;
 import com.jchanghong.appsearch.fragment.MainFragment;
 import com.jchanghong.appsearch.service.XDesktopHelperService;
 
 @SuppressLint("ResourceAsColor")
-public class MainActivity extends BaseSingleFragmentActivity implements
-		OnClickListener {
+public class MainActivity extends BaseSingleFragmentActivity
+		 {
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		XDesktopHelperService.startService(getApplicationContext());
 		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
 	}
 
 	@Override
@@ -34,24 +28,17 @@ public class MainActivity extends BaseSingleFragmentActivity implements
 	}
 
 	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-		return super.dispatchTouchEvent(ev);
-	}
-
-	@Override
-	public boolean onKeyDown(int keycode, KeyEvent e) {
-		return super.onKeyDown(keycode, e);
-	}
-
-	@Override
 	public void onBackPressed() {
 		runInBackgroud();
 	}
-
-	@Override
-	public void onClick(View v) {
-	}
-
+			 @Override
+     public boolean onKeyDown(int keyCode, KeyEvent event) {
+			         if (keyCode == KeyEvent.KEYCODE_BACK) {
+				                  runInBackgroud();
+				             return true;
+				          }
+			         return super.onKeyDown(keyCode, event);
+			      }
 	private void runInBackgroud() {
 		moveTaskToBack(true);
 		XDesktopHelperService.startService(getApplicationContext());

@@ -21,16 +21,7 @@ public abstract class BaseSingleFragmentActivity extends Activity {
 
 	}
 
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-	}
-
 	protected abstract Fragment createFragment();
-	
-
-
 
 	private void loadFragment() {
 		FragmentManager fm = getFragmentManager();

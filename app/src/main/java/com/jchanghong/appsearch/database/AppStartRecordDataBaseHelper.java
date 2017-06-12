@@ -1,6 +1,7 @@
 package com.jchanghong.appsearch.database;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import junit.framework.Test;
@@ -14,15 +15,9 @@ import com.jchanghong.appsearch.model.AppStartRecord;
 
 
 public class AppStartRecordDataBaseHelper {
-    private static AppStartRecordDataBaseHelper mInstance;
+    public static AppStartRecordDataBaseHelper mInstance=new AppStartRecordDataBaseHelper();
     private XDesktopHelperSQLiteOpenHelper mXDesktopHelperSQLiteOpenHelper;
-    public static AppStartRecordDataBaseHelper getInstance(){
-        if(null==mInstance){
-            mInstance=new AppStartRecordDataBaseHelper();
-        }
-        
-        return mInstance;
-    }
+
     
     private AppStartRecordDataBaseHelper(){
         initAppStartRecordDateBaseHelper();
@@ -151,15 +146,11 @@ public class AppStartRecordDataBaseHelper {
     /*end: delete*/
     
     /*start: query*/
-    public List<AppStartRecord> queryAllStocks(List<AppStartRecord> stocks){
-        do{
-            if(null==stocks){
-                break;
-            }
-            stocks.clear();
+    public List<AppStartRecord> queryAllStocks(){
+        List<AppStartRecord> stocks = new ArrayList<>();
             SQLiteDatabase db=mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
             if(null==db){ 
-                break;
+                return stocks;
             }
             
             String[] appStartRecordColumns={
@@ -168,7 +159,8 @@ public class AppStartRecordDataBaseHelper {
  
             };
             
-            String appStartRecordOrderBy=XDesktopHelperDatabase.AppStartRecordColumns.KEY+" ASC";//" DESC";
+//            String appStartRecordOrderBy=XDesktopHelperDatabase.AppStartRecordColumns.KEY+" ASC";//" DESC";
+            String appStartRecordOrderBy=XDesktopHelperDatabase.AppStartRecordColumns.START_TIME+" DESC";//" DESC";
             Cursor appStartRecordCursor=db.query(XDesktopHelperDatabase.Table.AppStartRecord.APP_START_RECORD_TABLE, appStartRecordColumns, null, null, null, null, appStartRecordOrderBy);
             if(null!=appStartRecordCursor){
                 int keyColumnIndex=appStartRecordCursor.getColumnIndex(appStartRecordColumns[0]);
@@ -188,9 +180,38 @@ public class AppStartRecordDataBaseHelper {
                 appStartRecordCursor.close();
             }
             db.close();
-        }while(false);
-        
         return stocks;
+    }
+    /*end: delete*/
+
+    /*start: query key package name nullable*/
+    public String[] queryLast5Record(){
+        LinkedHashSet set = new LinkedHashSet();
+            SQLiteDatabase db=mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
+            if(null==db){
+                return null;
+            }
+
+            String[] appStartRecordColumns={
+                    XDesktopHelperDatabase.AppStartRecordColumns.KEY,
+                    XDesktopHelperDatabase.AppStartRecordColumns.START_TIME,
+
+            };
+
+//            String appStartRecordOrderBy=XDesktopHelperDatabase.AppStartRecordColumns.KEY+" ASC";//" DESC";
+            String appStartRecordOrderBy=XDesktopHelperDatabase.AppStartRecordColumns.START_TIME+" DESC";//" DESC";
+            Cursor appStartRecordCursor=db.query(XDesktopHelperDatabase.Table.AppStartRecord.APP_START_RECORD_TABLE, appStartRecordColumns, null, null, null, null, appStartRecordOrderBy);
+
+            if(null!=appStartRecordCursor){
+                int keyColumnIndex=appStartRecordCursor.getColumnIndex(appStartRecordColumns[0]);
+                while(appStartRecordCursor.moveToNext()){
+                    String key=appStartRecordCursor.getString(keyColumnIndex);
+                    set.add(key);
+                }
+                appStartRecordCursor.close();
+            }
+            db.close();
+        return (String[]) set.toArray();
     }
     /*end: query*/
     

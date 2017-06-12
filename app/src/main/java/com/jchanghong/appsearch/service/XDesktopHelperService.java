@@ -19,27 +19,21 @@ public class XDesktopHelperService extends Service{
 
 	@Override
 	public void onCreate() {
-		Log.i(TAG, "onCreate");
 		super.onCreate();
 		
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		AppInfoHelper.getInstance().startLoadAppInfo();
-		Log.i(TAG, "onStartCommand");
-
-		
+		AppInfoHelper.mInstance.startLoadAppInfo();
 		return START_STICKY;
 	}
 
 	@Override
 	public void onDestroy() {
-		Log.i(TAG, "onDestroy");
-		startService();
 		super.onDestroy();
+		startService();
 	}
-	
 
 	
 	private void startService(){
@@ -52,8 +46,7 @@ public class XDesktopHelperService extends Service{
 		Intent intent=new Intent(context,XDesktopHelperService.class);
 		intent.setAction(XDesktopHelperService.ACTION_X_DESKTOP_HELPER_SERVICE);
 		context.startService(intent);
-		
-		
+
 	}
 	
 	public static void stopService(Context context){

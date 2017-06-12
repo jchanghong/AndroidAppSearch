@@ -17,29 +17,21 @@ import com.jchanghong.appsearch.util.AppCommonWeightsUtil;
 
 
 public class AppStartRecordHelper {
-    private static final String TAG=AppStartRecordHelper.class.getSimpleName();
-    private static AppStartRecordHelper mInstance;
-    private List<AppStartRecord> mAppStartRecords;
-    private LoadStatus mAppStartRecordsLoadStatus;
-    private AsyncTask<Object, Object, List<AppStartRecord>> mLoadAppStartRecordTask=null;
-    private OnAppStartRecordLoad mOnAppStartRecordLoad;
+    public static AppStartRecordHelper mInstance=new AppStartRecordHelper();
+    public List<AppStartRecord> mAppStartRecords;
+    public LoadStatus mAppStartRecordsLoadStatus;
+    public AsyncTask<Object, Object, List<AppStartRecord>> mLoadAppStartRecordTask=null;
+    public OnAppStartRecordLoad mOnAppStartRecordLoad;
     
    
     public interface OnAppStartRecordLoad{
         void onAppStartRecordSuccess();
         void onAppStartRecordFailed();
     }
+
+
     
-    public static AppStartRecordHelper getInstance(){
-        
-        if(null==mInstance){
-            mInstance=new AppStartRecordHelper();
-        }
-        
-        return mInstance;
-    }
-    
-    private AppStartRecordHelper(){
+    public AppStartRecordHelper(){
         initAppStartRecordHelper();
     }
     
@@ -60,7 +52,7 @@ public class AppStartRecordHelper {
     }
 
     
-    private void initAppStartRecordHelper(){
+    public void initAppStartRecordHelper(){
        if(null==mAppStartRecords){
            mAppStartRecords=new ArrayList<AppStartRecord>();
        }else{
@@ -108,39 +100,31 @@ public class AppStartRecordHelper {
             }
             
             for(AppStartRecord asr:mAppStartRecords){
-                if(true==AppInfoHelper.getInstance().getBaseAllAppInfosHashMap().containsKey(asr.getKey())){
-                    appInfo= AppInfoHelper.getInstance().getBaseAllAppInfosHashMap().get(asr.getKey());
+                if(true==AppInfoHelper.mInstance.mBaseAllAppInfosHashMap.containsKey(asr.getKey())){
+                    appInfo= AppInfoHelper.mInstance.mBaseAllAppInfosHashMap.get(asr.getKey());
                     appInfo.setCommonWeights(appInfo.getCommonWeights()+AppCommonWeightsUtil.getCommonWeights(currentTimeMs, asr.getStartTime()));
                 }
             }
-            Collections.sort(AppInfoHelper.getInstance().getBaseAllAppInfos(), AppInfo.mSortByDefault);
-           /* for(int i=0; i<AppInfoHelper.getInstance().getBaseAllAppInfos().size() ; i++){
-                Log.i(TAG, AppInfoHelper.getInstance().getBaseAllAppInfos().get(i).getLabel()+":"+AppInfoHelper.getInstance().getBaseAllAppInfos().get(i).getCommonWeights());
+            Collections.sort(AppInfoHelper.mInstance.mBaseAllAppInfos, AppInfo.mSortByDefault);
+           /* for(int i=0; i<AppInfoHelper.mInstance.getBaseAllAppInfos().size() ; i++){
+                Log.i(TAG, AppInfoHelper.mInstance.getBaseAllAppInfos().get(i).getLabel()+":"+AppInfoHelper.mInstance.getBaseAllAppInfos().get(i).getCommonWeights());
             }*/
             parseSuccess=true;
         }while(false);
         
         return parseSuccess;
     }
-    private boolean isAppStartRecordLoading(){
+    public boolean isAppStartRecordLoading(){
         return ((null!=mLoadAppStartRecordTask)&&(mLoadAppStartRecordTask.getStatus()==Status.RUNNING));
 
     }
     
-    private List<AppStartRecord> loadAppStartRecord(){
+    public List<AppStartRecord> loadAppStartRecord(){
         setAppStartRecordsLoadStatus(LoadStatus.LOADING);
-        List<AppStartRecord> appStartRecords=new ArrayList<AppStartRecord>();
-        AppStartRecordDataBaseHelper.getInstance().queryAllStocks(appStartRecords);
-       // Log.i(TAG, "appStartRecords.size()="+appStartRecords.size());
-      //  long currentTimeMs=System.currentTimeMillis();
-//        for(AppStartRecord asr:appStartRecords){
-//            Log.i(TAG, asr.getKey()+":"+asr.getStartTime()+":"+AppCommonWeightsUtil.getCommonWeights(currentTimeMs, asr.getStartTime()));
-//             
-//        }
-        return appStartRecords;
+    return     AppStartRecordDataBaseHelper.mInstance.queryAllStocks();
     }
     
-    private void parseAppStartRecord(List<AppStartRecord> appStartRecords){
+    public void parseAppStartRecord(List<AppStartRecord> appStartRecords){
         if(null==appStartRecords){
             setAppStartRecordsLoadStatus(LoadStatus.NOT_LOADED);
             if(null!=mOnAppStartRecordLoad){
