@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.jchanghong.appsearch.R;
 import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.helper.AppInfoHelper;
-import com.jchanghong.appsearch.helper.SettingsHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppStartRecord;
 
@@ -112,7 +111,7 @@ public class AppUtil {
                         Toast.makeText(context, R.string.app_can_not_be_launched_directly,
                                 Toast.LENGTH_SHORT).show();
                     } else {
-                        if (true == SettingsHelper.getInstance().isSmartSorting()) {
+                        if (true == true) {
                             long startTimeMs = System.currentTimeMillis();
                             AppStartRecord appStartRecord = new AppStartRecord(appInfo.getKey(),
                                     startTimeMs);

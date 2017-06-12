@@ -29,7 +29,7 @@ public class AppStartRecordDataBaseHelper {
     }
     
     private void initAppStartRecordDateBaseHelper(){
-        mXDesktopHelperSQLiteOpenHelper=XDesktopHelperSQLiteOpenHelper.getInstance(XDesktopHelperApplication.getContext());
+        mXDesktopHelperSQLiteOpenHelper=XDesktopHelperSQLiteOpenHelper.getInstance(XDesktopHelperApplication.mcontext);
         return;
     }
     

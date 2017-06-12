@@ -15,7 +15,7 @@ public class MenuPositionModeSp {
 	public static MenuPositionMode getMenuPositionMode(){
 		MenuPositionMode menuPositionModel=MenuPositionMode.LEFT;
 		
-		Context context = XDesktopHelperApplication.getContext();
+		Context context = XDesktopHelperApplication.mcontext;
 		SharedPreferences sp = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		String menuPositionModelStr=sp.getString(MENU_POSITION_MODE,MenuPositionMode.LEFT.toString());
@@ -29,7 +29,7 @@ public class MenuPositionModeSp {
 	}
 	
 	public static void saveMenuPositionMode(MenuPositionMode menuPositionMode){
-		Context context = XDesktopHelperApplication.getContext();
+		Context context = XDesktopHelperApplication.mcontext;
 		SharedPreferences sp = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		Editor editor = sp.edit();

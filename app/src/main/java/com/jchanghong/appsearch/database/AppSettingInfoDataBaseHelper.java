@@ -27,7 +27,7 @@ public class AppSettingInfoDataBaseHelper {
 	 }
 		
 	 private void initAppInfoDataBaseHelper(){
-		 mXDesktopHelperSQLiteOpenHelper=XDesktopHelperSQLiteOpenHelper.getInstance(XDesktopHelperApplication.getContext());
+		 mXDesktopHelperSQLiteOpenHelper=XDesktopHelperSQLiteOpenHelper.getInstance(XDesktopHelperApplication.mcontext);
 		 return;
 	 }
 		

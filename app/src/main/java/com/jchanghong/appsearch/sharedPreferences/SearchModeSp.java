@@ -13,7 +13,7 @@ public class SearchModeSp {
 	
 	public static SearchMode getSearchMode(){
 		SearchMode searchMode=SearchMode.T9;
-		Context context = XDesktopHelperApplication.getContext();
+		Context context = XDesktopHelperApplication.mcontext;
 		SharedPreferences sp = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		
@@ -28,7 +28,7 @@ public class SearchModeSp {
 	}
 	
 	public static void saveSearchMode(SearchMode searchMode){
-		Context context = XDesktopHelperApplication.getContext();
+		Context context = XDesktopHelperApplication.mcontext;
 		SharedPreferences sp = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		Editor editor = sp.edit();

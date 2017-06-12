@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.jchanghong.appsearch.application.XDesktopHelperApplication;
-import com.jchanghong.appsearch.database.AppSettingInfoDataBaseHelper;
 import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppInfo.SearchByType;
@@ -76,7 +75,7 @@ public class AppInfoHelper {
 	}
 	
 	private void initAppInfoHelper(){
-		mContext=XDesktopHelperApplication.getContext();
+		mContext=XDesktopHelperApplication.mcontext;
 		setCurrentAppType(AppType.ALL_APP);
 		setBaseAllAppInfosLoadStatus(LoadStatus.NOT_LOADED);
 		clearAppInfoData();
@@ -585,19 +584,7 @@ public class AppInfoHelper {
 	    return resetSequenceSuccess;
 	}
 
-	public boolean resetAllSequence(){
-		boolean resetSequenceSuccess=false;
-		boolean deleteStartRecordSuccess= AppStartRecordDataBaseHelper.getInstance().deleteAll();
-		boolean appSettingInfoSuccess=AppSettingInfoDataBaseHelper.getInstance().deleteAll();
-		if((true==deleteStartRecordSuccess)&&(true==appSettingInfoSuccess)){
-			for(AppInfo ai:mBaseAllAppInfos){
-				ai.setSetToTop(0);
-				ai.setCommonWeights(0);
-			}
-			resetSequenceSuccess=true;
-		}
-		return resetSequenceSuccess;
-	}
+
 	
 	public boolean remove(String packageName){
 	    boolean removeSuccess=false;

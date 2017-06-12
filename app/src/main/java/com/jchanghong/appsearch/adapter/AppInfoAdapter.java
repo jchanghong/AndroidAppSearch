@@ -24,7 +24,6 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
 	public AppInfoAdapter(Context context, int textViewResourceId,
 			List<AppInfo> appInfos) {
 		super(context, textViewResourceId, appInfos);
-		;
 		mContext = context;
 		mTextViewResourceId = textViewResourceId;
 		mAppInfos = appInfos;

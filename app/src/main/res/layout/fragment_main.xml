@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ffffff"
+              android:orientation="vertical" >
 
-    <com.jchanghong.appsearch.view.TopTabView
-        android:id="@+id/top_tab_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/top_tab_height_without_icon"
-        android:gravity="center_vertical"
-        android:padding="@dimen/padding" />
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
 
-    <View style="@style/dividing_line_horizontal" />
+        <GridView
+                android:id="@+id/t9_search_grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:columnWidth="80dp"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="auto_fit"
+                android:verticalSpacing="24dp" >
+        </GridView>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical" >
 
-    <com.jchanghong.appsearch.view.CustomViewPager
-        android:id="@+id/custom_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            <com.jchanghong.appsearch.view.T9TelephoneDialpadView
+                    android:id="@+id/t9_telephone_dialpad_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true" />
+            <!--<View style="@style/dividing_line_horizontal" />-->
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>
