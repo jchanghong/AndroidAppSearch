@@ -18,6 +18,8 @@
                 android:layout_marginBottom="1dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginTop="1dp"
+                android:focusable="false"
+                android:clickable="false"
                 android:layout_weight="1"
                 android:background="#ffffff"
                 android:orientation="vertical">
@@ -30,6 +32,8 @@
                     android:hint="@string/search_input_prompt"
                     android:text="3" android:inputType="number"
                     android:layout_gravity="center_horizontal"
+                    android:focusable="false"
+                    android:clickable="false"
                     android:textAlignment="center"
 
             />
