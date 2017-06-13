@@ -17,8 +17,9 @@ import com.jchanghong.appsearch.helper.AppStartRecordHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.service.XDesktopHelperService;
 import com.jchanghong.appsearch.util.AppUtil;
-import com.jchanghong.appsearch.util.ViewUtil;
 import com.jchanghong.appsearch.view.T9TelephoneDialpadView;
+
+import java.util.Collections;
 
 @SuppressLint("ResourceAsColor")
 public class MainActivity extends Activity
@@ -27,7 +28,7 @@ public class MainActivity extends Activity
 	private static final String TAG="MainFragment";
 	private GridView mT9SearchGv;
 	private T9TelephoneDialpadView mT9TelephoneDialpadView;
-	private AppInfoAdapter mAppInfoAdapter;
+	static public AppInfoAdapter mAppInfoAdapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -120,7 +121,6 @@ public class MainActivity extends Activity
 		BaseAdapter baseAdapter = (BaseAdapter) mT9SearchGv.getAdapter();
  		Log.i(TAG, "getCount"+baseAdapter.getCount()+"");
 		baseAdapter.notifyDataSetChanged();
-		ViewUtil.showView(mT9SearchGv);
 	}
 	@Override
 	public void onAppInfoLoadSuccess() {

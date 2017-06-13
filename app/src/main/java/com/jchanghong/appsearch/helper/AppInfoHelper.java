@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.text.TextUtils;
+import com.jchanghong.appsearch.activity.MainActivity;
 import com.jchanghong.appsearch.application.XDesktopHelperApplication;
 import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.model.*;
@@ -168,7 +169,7 @@ public class AppInfoHelper {
 		if(null!=mT9SearchAppInfos){
 			mT9SearchAppInfos.clear();
 		}else{
-			mT9SearchAppInfos=new ArrayList<AppInfo>();
+			mT9SearchAppInfos=new LinkedList<>();
 		}
 		
 		if(TextUtils.isEmpty(search)){
@@ -227,25 +228,20 @@ public class AppInfoHelper {
             ai.setMatchStartIndex(-1);
             ai.setMatchLength(0);
         }
-		mT9SearchAppInfos.addAll(baseAppInfos);
-
-		mFirstNoT9SearchResultInput.delete(0, mFirstNoT9SearchResultInput.length());
-//			Log.i(TAG, "null==search,mFirstNoT9SearchResultInput.length()="+ mFirstNoT9SearchResultInput.length());
-//		Collections.sort(mT9SearchAppInfos, AppInfo.mSortByDefault);
 		if (AppStartRecordHelper.mInstance.mrecords == null) {
+			mT9SearchAppInfos.addAll(baseAppInfos);
+			mFirstNoT9SearchResultInput.delete(0, mFirstNoT9SearchResultInput.length());
+			Collections.sort(mT9SearchAppInfos, AppInfo.mSortByDefault);
 			return;
 		}
+		LinkedHashSet set = new LinkedHashSet();
 		LinkedList<String> mrecords = AppStartRecordHelper.mInstance.mrecords;
-			int index = 0;
-			while (mrecords.size()>index&&index<5) {
-				AppInfo o = mBaseAllAppInfosHashMap.get(mrecords.getFirst());
-				int i = mT9SearchAppInfos.indexOf(o);
-				AppInfo stemp = mT9SearchAppInfos.get(index);
-				mT9SearchAppInfos.set(index, o);
-				mT9SearchAppInfos.set(i, stemp);
-				index++;
-			}
-		return;
+		for (String mrecord : mrecords) {
+			AppInfo o = mBaseAllAppInfosHashMap.get(mrecord);
+			set.add(o);
+		}
+		set.addAll(mBaseAllAppInfos);
+		MainActivity.mAppInfoAdapter.setmAppInfos(set.toArray());
 	}
 
 	public boolean isAppExist(String packageName){
@@ -423,7 +419,7 @@ public class AppInfoHelper {
 		}
 		
 		if(null==mT9SearchAppInfos){
-			mT9SearchAppInfos=new ArrayList<AppInfo>();
+			mT9SearchAppInfos=new LinkedList<>();
 		}else{
 		    mT9SearchAppInfos.clear();
 		}

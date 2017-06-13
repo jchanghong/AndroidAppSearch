@@ -1,5 +1,6 @@
 package com.jchanghong.appsearch.adapter;
 
+import java.util.Collections;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -18,7 +19,6 @@ import com.jchanghong.appsearch.util.ViewUtil;
 public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
 	private Context mContext;
 	private int mTextViewResourceId;
-
 	private List<AppInfo> mAppInfos;
 
 	public AppInfoAdapter(Context context, int textViewResourceId,
@@ -29,11 +29,13 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
 		mAppInfos = appInfos;
 
 	}
-	public void setmAppInfos(List<AppInfo> mAppInfos) {
-		this.mAppInfos = mAppInfos;
-		notifyDataSetChanged();
+	public void setmAppInfos(Object[] appInfos) {
+		mAppInfos.clear();
+		for (Object info : appInfos) {
+			mAppInfos.add((AppInfo) info);
+		}
+//		notifyDataSetChanged();
 	}
-
 	@SuppressLint("NewApi")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

@@ -112,18 +112,18 @@ public class AppUtil {
                                     startTimeMs);
                             AppStartRecordDataBaseHelper.mInstance.insert(appStartRecord);
                         if (AppStartRecordHelper.mInstance.mrecords != null) {
-                            AppStartRecordHelper.mInstance.mrecords.addLast(appInfo.getKey());
+                            AppStartRecordHelper.mInstance.mrecords.addFirst(appInfo.getKey());
                         }
-                            AppInfo ai = AppInfoHelper.mInstance.mBaseAllAppInfosHashMap
-                                    .get(appInfo.getKey());
-                            if (null != ai) {
-                                ai.setCommonWeights(ai.getCommonWeights()
-                                        + AppCommonWeightsUtil.getCommonWeights(startTimeMs));
-//                                Log.i(TAG, ai.getPackageName() + ":" + ai.getCommonWeights());
-                                Collections.sort(AppInfoHelper.mInstance.mBaseAllAppInfos,
-                                        AppInfo.mSortByDefault);
-
-                            }
+//                            AppInfo ai = AppInfoHelper.mInstance.mBaseAllAppInfosHashMap
+//                                    .get(appInfo.getKey());
+//                            if (null != ai) {
+//                                ai.setCommonWeights(ai.getCommonWeights()
+//                                        + AppCommonWeightsUtil.getCommonWeights(startTimeMs));
+////                                Log.i(TAG, ai.getPackageName() + ":" + ai.getCommonWeights());
+//                                Collections.sort(AppInfoHelper.mInstance.mBaseAllAppInfos,
+//                                        AppInfo.mSortByDefault);
+//
+//                            }
 
                     }
                 } else {
