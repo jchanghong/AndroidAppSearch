@@ -12,4 +12,4 @@ apk只有100kb的小工具
 [https://github.com/handsomezhou/PinyinSearchLibrary](https://github.com/handsomezhou/PinyinSearchLibrary)
 
 ### 应用截图
-[https://github.com/jchanghong/AndroidAppSearch/blob/master/external_res/image/QQ%E6%88%AA%E5%9B%BE20170613130402.png]!
+![https://github.com/jchanghong/AndroidAppSearch/blob/master/external_res/image/QQ%E6%88%AA%E5%9B%BE20170613130402.png]
