@@ -3,7 +3,6 @@ package com.jchanghong.appsearch.helper;
 import android.os.AsyncTask;
 import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.model.AppStartRecord;
-import com.jchanghong.appsearch.model.LoadStatus;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -17,7 +16,6 @@ public class AppStartRecordHelper {
     public static final AppStartRecordHelper mInstance = new AppStartRecordHelper();
     private final List<AppStartRecord> mAppStartRecords = new ArrayList<>();
     public LinkedList<String> mrecords = null;
-    private LoadStatus mAppStartRecordsLoadStatus;
     private AsyncTask<Object, Object, List<AppStartRecord>> mLoadAppStartRecordTask = null;
 
     private AppStartRecordHelper() {
@@ -39,19 +37,12 @@ public class AppStartRecordHelper {
 
     }
 
-    private void setAppStartRecordsLoadStatus(LoadStatus appStartRecordsLoadStatus) {
-        mAppStartRecordsLoadStatus = appStartRecordsLoadStatus;
-    }
-
     private void initAppStartRecordHelper() {
-        setAppStartRecordsLoadStatus(LoadStatus.NOT_LOADED);
+
     }
 
     public boolean startLoadAppStartRecord() {
-//        if(true==isAppStartRecordLoading()){
-//            return false;
-//        }
-//
+
         mLoadAppStartRecordTask = new AsyncTask<Object, Object, List<AppStartRecord>>() {
 
             @Override
@@ -74,26 +65,17 @@ public class AppStartRecordHelper {
         return true;
     }
 
-//    public boolean isAppStartRecordLoading(){
-//        return ((null!=mLoadAppStartRecordTask)&&(mLoadAppStartRecordTask.getStatus()==Status.RUNNING));
-//
-//    }
-
     private List<AppStartRecord> loadAppStartRecord() {
-        setAppStartRecordsLoadStatus(LoadStatus.LOADING);
         return AppStartRecordDataBaseHelper.mInstance.queryAllStocks();
     }
 
     private void parseAppStartRecord(List<AppStartRecord> appStartRecords) {
-        if (appStartRecords.size() < 1) {
-            setAppStartRecordsLoadStatus(LoadStatus.NOT_LOADED);
+        if (appStartRecords==null) {
             onAppStartRecordFailed();
             return;
         }
         mAppStartRecords.clear();
         mAppStartRecords.addAll(appStartRecords);
-
-        setAppStartRecordsLoadStatus(LoadStatus.LOAD_FINISH);
         onAppStartRecordSuccess();
 
     }

@@ -33,21 +33,18 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
         for (Object info : appInfos) {
             mAppInfos.add((AppInfo) info);
         }
-//		notifyDataSetChanged();
     }
 
     @SuppressLint("NewApi")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
+        View view;
         ViewHolder viewHolder;
         AppInfo appInfo = getItem(position);
         if (null == convertView) {
             view = LayoutInflater.from(mContext).inflate(mTextViewResourceId,
                     null);
             viewHolder = new ViewHolder();
-//			viewHolder.mAlphabetTv = (TextView) view
-//					.findViewById(R.id.alphabet_text_view);
             viewHolder.mIconIv = (ImageView) view
                     .findViewById(R.id.icon_image_view);
             viewHolder.mLabelTv = (TextView) view
@@ -76,7 +73,6 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
     }
 
     private class ViewHolder {
-        TextView mAlphabetTv;
         ImageView mIconIv;
         TextView mLabelTv;
     }

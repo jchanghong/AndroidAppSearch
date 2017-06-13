@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,7 +22,6 @@ import com.jchanghong.appsearch.view.T9TelephoneDialpadView;
 public class MainActivity extends Activity
         implements
         T9TelephoneDialpadView.OnT9TelephoneDialpadView, AppInfoHelper.OnAppInfoLoad {
-    private static final String TAG = "MainFragment";
     static public AppInfoAdapter mAppInfoAdapter;
     private GridView mT9SearchGv;
     private T9TelephoneDialpadView mT9TelephoneDialpadView;
@@ -105,7 +103,6 @@ public class MainActivity extends Activity
     }
 
     private void search(String keyword) {
-        Log.i(TAG, "keyword=[" + keyword + "]");
         String curCharacter;
         if (null == keyword) {
             curCharacter = keyword;
@@ -121,7 +118,6 @@ public class MainActivity extends Activity
 
     private void refreshT9SearchGv() {
         BaseAdapter baseAdapter = (BaseAdapter) mT9SearchGv.getAdapter();
-        Log.i(TAG, "getCount" + baseAdapter.getCount() + "");
         baseAdapter.notifyDataSetChanged();
     }
 

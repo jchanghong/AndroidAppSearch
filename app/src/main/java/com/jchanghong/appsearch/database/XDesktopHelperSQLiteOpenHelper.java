@@ -5,14 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class XDesktopHelperSQLiteOpenHelper extends SQLiteOpenHelper {
-    private static final String TAG = "XDesktopHelperSQLiteOpenHelper";
-    private static final String CREATE_APP_INFO_TABLE = "create table "
-            + XDesktopHelperDatabase.Table.AppSettingInfo.APP_INFO_TABLE
-            + "("
-            + XDesktopHelperDatabase.AppSettingInfoColumns.ID + " integer unique,"
-            + XDesktopHelperDatabase.AppSettingInfoColumns.KEY + " text,"
-            + XDesktopHelperDatabase.AppSettingInfoColumns.SET_TO_TOP + " integer"
-            + ")";
+//    private static final String TAG = "XDesktopHelperSQLiteOpenHelper";
+//    private static final String CREATE_APP_INFO_TABLE = "create table "
+//            + XDesktopHelperDatabase.Table.AppSettingInfo.APP_INFO_TABLE
+//            + "("
+//            + XDesktopHelperDatabase.AppSettingInfoColumns.ID + " integer unique,"
+//            + XDesktopHelperDatabase.AppSettingInfoColumns.KEY + " text,"
+//            + XDesktopHelperDatabase.AppSettingInfoColumns.SET_TO_TOP + " integer"
+//            + ")";
     private static final String CREATE_APP_START_RECORD_TABLE = "create table "
             + XDesktopHelperDatabase.Table.AppStartRecord.APP_START_RECORD_TABLE
             + "("
