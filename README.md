@@ -1,6 +1,5 @@
-# XDesktopHelper
-A efficient and simple desktop application search tool.Support T9 search and Qwerty search.
-
+#应用搜索
+apk只有100kb的小工具
 
 ### pinyin4j 
 	Pinyin4j is a popular Java library supporting convertion between Chinese characters 
