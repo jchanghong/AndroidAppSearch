@@ -15,8 +15,8 @@ import java.util.List;
 
 public class AppStartRecordHelper {
     public static final AppStartRecordHelper mInstance = new AppStartRecordHelper();
-    public LinkedList<String> mrecords = null;
     private final List<AppStartRecord> mAppStartRecords = new ArrayList<>();
+    public LinkedList<String> mrecords = null;
     private LoadStatus mAppStartRecordsLoadStatus;
     private AsyncTask<Object, Object, List<AppStartRecord>> mLoadAppStartRecordTask = null;
 

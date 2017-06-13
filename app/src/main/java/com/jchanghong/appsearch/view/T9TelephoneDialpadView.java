@@ -15,9 +15,9 @@ import com.jchanghong.appsearch.R;
 public class T9TelephoneDialpadView extends LinearLayout implements
         OnClickListener {
 
+    private final Context mContext;
     public EditText mT9InputEt;
     public OnT9TelephoneDialpadView mOnT9TelephoneDialpadView = null;
-    private final Context mContext;
     /**
      * Inflate Custom T9 phone dialpad View hierarchy from the specified xml
      * resource.
@@ -25,6 +25,7 @@ public class T9TelephoneDialpadView extends LinearLayout implements
     private View mDialpadView; // this Custom View As the T9TelephoneDialpadView
     // of children
     private MydeleteButton mDialDeleteBtn;
+
     public T9TelephoneDialpadView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;

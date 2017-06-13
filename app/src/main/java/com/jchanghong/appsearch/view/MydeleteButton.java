@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class MydeleteButton extends View {
+    private Paint paint = new Paint();
+
     public MydeleteButton(Context context) {
         super(context);
     }
@@ -16,7 +18,6 @@ public class MydeleteButton extends View {
         super(context, attrs);
     }
 
-    private Paint paint = new Paint();
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

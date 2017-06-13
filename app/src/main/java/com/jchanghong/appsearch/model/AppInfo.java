@@ -24,14 +24,6 @@ public class AppInfo extends BaseAppInfo {
         }
     };
     private static final Comparator<Object> mChineseComparator = Collator.getInstance(Locale.CHINA);
-    public static Comparator<AppInfo> mSortBySortKeyDes = new Comparator<AppInfo>() {
-
-        @Override
-        public int compare(AppInfo lhs, AppInfo rhs) {
-
-            return mChineseComparator.compare(rhs.mSortKey, lhs.mSortKey);
-        }
-    };
     public static final Comparator<AppInfo> mSortBySortKeyAsc = new Comparator<AppInfo>() {
 
         @Override
@@ -58,6 +50,14 @@ public class AppInfo extends BaseAppInfo {
 
 
             return compareValue;
+        }
+    };
+    public static Comparator<AppInfo> mSortBySortKeyDes = new Comparator<AppInfo>() {
+
+        @Override
+        public int compare(AppInfo lhs, AppInfo rhs) {
+
+            return mChineseComparator.compare(rhs.mSortKey, lhs.mSortKey);
         }
     };
     private String mSortKey; // as the sort key word
@@ -122,13 +122,13 @@ public class AppInfo extends BaseAppInfo {
         return mMatchKeywords;
     }
 
+    private void setMatchKeywords(StringBuffer matchKeywords) {
+        mMatchKeywords = matchKeywords;
+    }
+
     public void setMatchKeywords(String matchKeywords) {
         mMatchKeywords.delete(0, mMatchKeywords.length());
         mMatchKeywords.append(matchKeywords);
-    }
-
-    private void setMatchKeywords(StringBuffer matchKeywords) {
-        mMatchKeywords = matchKeywords;
     }
 
     public void clearMatchKeywords() {

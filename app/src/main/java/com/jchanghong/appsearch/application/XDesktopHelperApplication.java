@@ -13,6 +13,6 @@ public class XDesktopHelperApplication extends Application {
     @Override
     public void onCreate() {
         AppInfoHelper.mInstance.mContext = this;
-     AppStartRecordDataBaseHelper.mInstance.mXDesktopHelperSQLiteOpenHelper = XDesktopHelperSQLiteOpenHelper.getInstance(this);
-}
+        AppStartRecordDataBaseHelper.mInstance.mXDesktopHelperSQLiteOpenHelper = XDesktopHelperSQLiteOpenHelper.getInstance(this);
+    }
 }

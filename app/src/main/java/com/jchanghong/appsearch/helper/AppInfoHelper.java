@@ -27,19 +27,19 @@ import com.pinyinsearch.util.T9Util;
 import java.util.*;
 
 public class AppInfoHelper {
-    private static final Character THE_LAST_ALPHABET = Constant.z;
     public static final AppInfoHelper mInstance = new AppInfoHelper();
+    private static final Character THE_LAST_ALPHABET = Constant.z;
     public Context mContext;
+    public List<AppInfo> mT9SearchAppInfos;
+    public OnAppInfoLoad mOnAppInfoLoad;
     private AppType mCurrentAppType;
     private List<AppInfo> mBaseAllAppInfos;
     private LoadStatus mBaseAllAppInfosLoadStatus;
     private HashMap<String, AppInfo> mBaseAllAppInfosHashMap = null;
     private List<AppInfo> mQwertySearchAppInfos;
-    public List<AppInfo> mT9SearchAppInfos;
     private StringBuffer mFirstNoQwertySearchResultInput = null;
     private StringBuffer mFirstNoT9SearchResultInput = null;
     private AsyncTask<Object, Object, List<AppInfo>> mLoadAppInfoTask = null;
-    public OnAppInfoLoad mOnAppInfoLoad;
     private boolean mAppInfoChanged = true;
 
     private AppInfoHelper() {
@@ -88,36 +88,36 @@ public class AppInfoHelper {
         List<AppInfo> kanjiStartAppInfos = new ArrayList<AppInfo>();
         List<AppInfo> nonKanjiStartAppInfos = new ArrayList<AppInfo>();
 
-            PackageManager pm = context.getPackageManager();
-            mBaseAllAppInfosLoadStatus = LoadStatus.LOADING;
-            Intent it = new Intent(Intent.ACTION_MAIN);
-            it.addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> resolveInfos = pm.queryIntentActivities(it, 0);
+        PackageManager pm = context.getPackageManager();
+        mBaseAllAppInfosLoadStatus = LoadStatus.LOADING;
+        Intent it = new Intent(Intent.ACTION_MAIN);
+        it.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> resolveInfos = pm.queryIntentActivities(it, 0);
 
-            for (ResolveInfo ri : resolveInfos) {
-                boolean canLaunchTheMainActivity = AppUtil.appCanLaunchTheMainActivity(mContext, ri.activityInfo.packageName);
-                if (canLaunchTheMainActivity) {
-                    AppInfo appInfo = getAppInfo(pm, ri);
-                    if (null == appInfo) {
-                        continue;
-                    }
-
-                    if (TextUtils.isEmpty(appInfo.getLabel())) {
-                        continue;
-                    }
-                    appInfo.getLabelPinyinSearchUnit().setBaseData(appInfo.getLabel());
-                    PinyinUtil.parse(appInfo.getLabelPinyinSearchUnit());
-                    String sortKey = PinyinUtil.getSortKey(appInfo.getLabelPinyinSearchUnit()).toUpperCase();
-                    appInfo.setSortKey(StringUtil.praseSortKey(sortKey));
-                    boolean isKanji = PinyinUtil.isKanji(appInfo.getLabel().charAt(0));
-                    if (isKanji) {
-                        kanjiStartAppInfos.add(appInfo);
-                    } else {
-                        nonKanjiStartAppInfos.add(appInfo);
-                    }
-
+        for (ResolveInfo ri : resolveInfos) {
+            boolean canLaunchTheMainActivity = AppUtil.appCanLaunchTheMainActivity(mContext, ri.activityInfo.packageName);
+            if (canLaunchTheMainActivity) {
+                AppInfo appInfo = getAppInfo(pm, ri);
+                if (null == appInfo) {
+                    continue;
                 }
+
+                if (TextUtils.isEmpty(appInfo.getLabel())) {
+                    continue;
+                }
+                appInfo.getLabelPinyinSearchUnit().setBaseData(appInfo.getLabel());
+                PinyinUtil.parse(appInfo.getLabelPinyinSearchUnit());
+                String sortKey = PinyinUtil.getSortKey(appInfo.getLabelPinyinSearchUnit()).toUpperCase();
+                appInfo.setSortKey(StringUtil.praseSortKey(sortKey));
+                boolean isKanji = PinyinUtil.isKanji(appInfo.getLabel().charAt(0));
+                if (isKanji) {
+                    kanjiStartAppInfos.add(appInfo);
+                } else {
+                    nonKanjiStartAppInfos.add(appInfo);
+                }
+
             }
+        }
         Collections.sort(kanjiStartAppInfos, AppInfo.mSortBySortKeyAsc);
         Collections.sort(nonKanjiStartAppInfos, AppInfo.mSortBySortKeyAsc);
 
@@ -248,7 +248,7 @@ public class AppInfoHelper {
                     break;
                 }
             }
-			/*if(mBaseAllAppInfosHashMap.containsKey(packageName+name)){
+            /*if(mBaseAllAppInfosHashMap.containsKey(packageName+name)){
 			    appExist=true;
 			    break;
 			}*/
