@@ -231,19 +231,20 @@ public class AppInfoHelper {
 
 		mFirstNoT9SearchResultInput.delete(0, mFirstNoT9SearchResultInput.length());
 //			Log.i(TAG, "null==search,mFirstNoT9SearchResultInput.length()="+ mFirstNoT9SearchResultInput.length());
-		Collections.sort(mT9SearchAppInfos, AppInfo.mSortByDefault);
-//		LinkedList<String> mrecords = AppStartRecordHelper.mInstance.mrecords;
-//		if (mrecords != null) {
-//			int index = 0;
-//			for (String mrecord : mrecords) {
-//				AppInfo o = mBaseAllAppInfosHashMap.get(mrecord);
-//				int i = mT9SearchAppInfos.indexOf(o);
-//				AppInfo stemp = mT9SearchAppInfos.get(index);
-//				mT9SearchAppInfos.set(index, o);
-//				mT9SearchAppInfos.set(i, stemp);
-//				index++;
-//			}
-//		}
+//		Collections.sort(mT9SearchAppInfos, AppInfo.mSortByDefault);
+		if (AppStartRecordHelper.mInstance.mrecords == null) {
+			return;
+		}
+		LinkedList<String> mrecords = AppStartRecordHelper.mInstance.mrecords;
+			int index = 0;
+			while (mrecords.size()>index&&index<5) {
+				AppInfo o = mBaseAllAppInfosHashMap.get(mrecords.getFirst());
+				int i = mT9SearchAppInfos.indexOf(o);
+				AppInfo stemp = mT9SearchAppInfos.get(index);
+				mT9SearchAppInfos.set(index, o);
+				mT9SearchAppInfos.set(i, stemp);
+				index++;
+			}
 		return;
 	}
 

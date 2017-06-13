@@ -48,14 +48,14 @@ public class XDesktopHelperSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_APP_START_RECORD_TABLE);
-        db.execSQL(CREATE_APP_INFO_TABLE);
+//        db.execSQL(CREATE_APP_INFO_TABLE);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists "+ XDesktopHelperDatabase.Table.AppStartRecord.APP_START_RECORD_TABLE);
-        db.execSQL("drop table if exists "+ XDesktopHelperDatabase.Table.AppSettingInfo.APP_INFO_TABLE);
+//        db.execSQL("drop table if exists "+ XDesktopHelperDatabase.Table.AppSettingInfo.APP_INFO_TABLE);
         
         onCreate(db);
     }
