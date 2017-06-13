@@ -7,10 +7,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.jchanghong.appsearch.R;
 
-public class MyButton extends LinearLayout{
-    private TextView textViewnumber;
-    private TextView textchars;
-    public String tag;
+public class MyButton extends LinearLayout {
+    public final String tag;
+    private final TextView textViewnumber;
+    private final TextView textchars;
+
     public MyButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater inflater = (LayoutInflater) context
@@ -20,7 +21,7 @@ public class MyButton extends LinearLayout{
                 this);
         textViewnumber = (TextView) root.findViewById(R.id.textview_number);
         textchars = (TextView) root.findViewById(R.id.textView_chars);
-        tag=  attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "tag");
+        tag = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "tag");
         init();
     }
 
@@ -54,7 +55,6 @@ public class MyButton extends LinearLayout{
                 do9();
                 break;
             default:
-                return;
         }
     }
 

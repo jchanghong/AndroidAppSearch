@@ -10,31 +10,30 @@
             android:layout_height="wrap_content"
             android:background="@color/bg"
             android:gravity="center_horizontal"
-         android:baselineAligned="false">
+            android:baselineAligned="false">
 
-            <EditText
-                    android:id="@+id/dial_input_edit_text"
-                    android:background="@null"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/search_input_prompt"
-                    android:text="3"
-                    android:inputType="number"
-                    android:layout_gravity="center_horizontal"
-                    android:focusable="false"
-                    android:clickable="false"
-                    android:textAlignment="center"
-            />
+        <EditText
+                android:id="@+id/dial_input_edit_text"
+                android:background="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_input_prompt"
+                android:text="3"
+                android:inputType="number"
+                android:layout_gravity="center_horizontal"
+                android:focusable="false"
+                android:clickable="false"
+                android:textAlignment="center"
+        />
 
-                <com.jchanghong.appsearch.view.MydeleteButton
-                        android:id="@+id/dial_delete_btn"
-                        android:background="@drawable/btn_selector"
-                        android:layout_gravity="right"
-                        android:clickable="true"
-                        android:visibility="visible"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
+        <com.jchanghong.appsearch.view.MydeleteButton
+                android:id="@+id/dial_delete_btn"
+                android:background="@drawable/btn_selector"
+                android:layout_gravity="end"
+                android:clickable="true"
+                android:visibility="visible"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
 
 
     </FrameLayout>

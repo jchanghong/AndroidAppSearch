@@ -1,4 +1,3 @@
-
 package com.jchanghong.appsearch.util;
 
 

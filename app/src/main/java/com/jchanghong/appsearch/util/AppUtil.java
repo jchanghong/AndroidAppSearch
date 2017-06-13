@@ -1,4 +1,3 @@
-
 package com.jchanghong.appsearch.util;
 
 import android.annotation.TargetApi;
@@ -15,19 +14,16 @@ import android.text.TextUtils;
 import android.widget.Toast;
 import com.jchanghong.appsearch.R;
 import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
-import com.jchanghong.appsearch.helper.AppInfoHelper;
 import com.jchanghong.appsearch.helper.AppStartRecordHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppStartRecord;
-
-import java.util.Collections;
 
 public class AppUtil {
     private static final String TAG = "AppUtil";
 
     /**
      * Return true when start app success,otherwise return false.
-     * 
+     *
      * @param context
      * @param packageName
      * @return
@@ -58,7 +54,7 @@ public class AppUtil {
      * @return
      */
 
-    public static boolean startApp(Context context, String packageName, String cls) {
+    private static boolean startApp(Context context, String packageName, String cls) {
         boolean startAppSuccess = false;
         do {
             if ((null == context) || TextUtils.isEmpty(packageName)) {
@@ -70,8 +66,7 @@ public class AppUtil {
                     packageName) != null) {
                 context.startActivity(intent);
                 startAppSuccess = true;
-            }
-            else {
+            } else {
                 System.out.println("app not found");
             }
         } while (false);
@@ -79,7 +74,7 @@ public class AppUtil {
         return startAppSuccess;
     }
 
-    public static Intent createLaunchIntent(ComponentName componentName) {
+    private static Intent createLaunchIntent(ComponentName componentName) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setComponent(componentName);
@@ -90,30 +85,30 @@ public class AppUtil {
 
     /**
      * start app via appinfo入口
-     * 
+     *
      * @param context
      * @param appInfo
      */
     public static boolean startApp(Context context, AppInfo appInfo) {
         boolean startAppSuccess = false;
-            if ((null == context) || (null == appInfo)) {
-                return false;
-            }
+        if ((null == context) || (null == appInfo)) {
+            return false;
+        }
 
-                if (!appInfo.getPackageName().equals(context.getPackageName())) {
-                    startAppSuccess = AppUtil.startApp(context, appInfo.getPackageName(),
-                            appInfo.getName());
-                    if (false == startAppSuccess) {
-                        Toast.makeText(context, R.string.app_can_not_be_launched_directly,
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                            long startTimeMs = System.currentTimeMillis();
-                            AppStartRecord appStartRecord = new AppStartRecord(appInfo.getKey(),
-                                    startTimeMs);
-                            AppStartRecordDataBaseHelper.mInstance.insert(appStartRecord);
-                        if (AppStartRecordHelper.mInstance.mrecords != null) {
-                            AppStartRecordHelper.mInstance.mrecords.addFirst(appInfo.getKey());
-                        }
+        if (!appInfo.getPackageName().equals(context.getPackageName())) {
+            startAppSuccess = AppUtil.startApp(context, appInfo.getPackageName(),
+                    appInfo.getName());
+            if (!startAppSuccess) {
+                Toast.makeText(context, R.string.app_can_not_be_launched_directly,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                long startTimeMs = System.currentTimeMillis();
+                AppStartRecord appStartRecord = new AppStartRecord(appInfo.getKey(),
+                        startTimeMs);
+                AppStartRecordDataBaseHelper.mInstance.insert(appStartRecord);
+                if (AppStartRecordHelper.mInstance.mrecords != null) {
+                    AppStartRecordHelper.mInstance.mrecords.addFirst(appInfo.getKey());
+                }
 //                            AppInfo ai = AppInfoHelper.mInstance.mBaseAllAppInfosHashMap
 //                                    .get(appInfo.getKey());
 //                            if (null != ai) {
@@ -125,11 +120,11 @@ public class AppUtil {
 //
 //                            }
 
-                    }
-                } else {
-                    Toast.makeText(context, R.string.the_app_has_been_launched, Toast.LENGTH_SHORT)
-                            .show();
-                }
+            }
+        } else {
+            Toast.makeText(context, R.string.the_app_has_been_launched, Toast.LENGTH_SHORT)
+                    .show();
+        }
 
 
         return startAppSuccess;
@@ -137,7 +132,7 @@ public class AppUtil {
 
     /**
      * whether app can Launch the main activity. Return true when can Launch,otherwise return false.
-     * 
+     *
      * @param context
      * @param packageName
      * @return
@@ -151,7 +146,7 @@ public class AppUtil {
 
             PackageManager pm = context.getPackageManager();
             Intent intent = pm.getLaunchIntentForPackage(packageName);
-            canLaunchTheMainActivity = (null == intent) ? (false) : (true);
+            canLaunchTheMainActivity = null != intent;
         } while (false);
 
         return canLaunchTheMainActivity;
@@ -159,11 +154,11 @@ public class AppUtil {
 
     /**
      * uninstall app via package name
-     * 
+     *
      * @param context
      * @param packageName
      */
-    public static void uninstallApp(Context context, String packageName) {
+    private static void uninstallApp(Context context, String packageName) {
         Uri packageUri = Uri.parse("package:" + packageName);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_DELETE);
@@ -173,7 +168,7 @@ public class AppUtil {
 
     /**
      * uninstall app via appInfo
-     * 
+     *
      * @param context
      * @param appInfo
      */
@@ -182,8 +177,7 @@ public class AppUtil {
             return;
         }
 
-        if (null != appInfo)
-        {
+        if (null != appInfo) {
             if (!appInfo.getPackageName().equals(context.getPackageName())) {
                 AppUtil.uninstallApp(context, appInfo.getPackageName());
             } else {
@@ -194,7 +188,7 @@ public class AppUtil {
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    public static void viewApp(Context context, String packageName) {
+    private static void viewApp(Context context, String packageName) {
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:" + packageName));
@@ -208,8 +202,7 @@ public class AppUtil {
             return;
         }
 
-        if (null != appInfo)
-        {
+        if (null != appInfo) {
             AppUtil.viewApp(context, appInfo.getPackageName());
 
         }
@@ -217,7 +210,7 @@ public class AppUtil {
 
     /**
      * get version name via package name
-     * 
+     *
      * @param context
      * @param packageName
      * @return

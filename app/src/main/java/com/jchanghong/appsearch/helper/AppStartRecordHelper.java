@@ -14,13 +14,17 @@ import java.util.List;
 
 
 public class AppStartRecordHelper {
-    public  LinkedList<String> mrecords = null;
-    public static AppStartRecordHelper mInstance=new AppStartRecordHelper();
-    public List<AppStartRecord> mAppStartRecords=new ArrayList<>();
-    public LoadStatus mAppStartRecordsLoadStatus;
-    public AsyncTask<Object, Object, List<AppStartRecord>> mLoadAppStartRecordTask=null;
+    public static final AppStartRecordHelper mInstance = new AppStartRecordHelper();
+    public LinkedList<String> mrecords = null;
+    private final List<AppStartRecord> mAppStartRecords = new ArrayList<>();
+    private LoadStatus mAppStartRecordsLoadStatus;
+    private AsyncTask<Object, Object, List<AppStartRecord>> mLoadAppStartRecordTask = null;
 
-    public void onAppStartRecordSuccess() {
+    private AppStartRecordHelper() {
+        initAppStartRecordHelper();
+    }
+
+    private void onAppStartRecordSuccess() {
         mrecords = new LinkedList<>();
         LinkedHashSet<String> set = new LinkedHashSet<>();
         for (AppStartRecord mAppStartRecord : mAppStartRecords) {
@@ -31,33 +35,24 @@ public class AppStartRecordHelper {
         }
     }
 
-    public void onAppStartRecordFailed() {
+    private void onAppStartRecordFailed() {
 
     }
 
-
-
-
-    
-    private AppStartRecordHelper(){
-        initAppStartRecordHelper();
-    }
-    
-
-    public void setAppStartRecordsLoadStatus(LoadStatus appStartRecordsLoadStatus) {
+    private void setAppStartRecordsLoadStatus(LoadStatus appStartRecordsLoadStatus) {
         mAppStartRecordsLoadStatus = appStartRecordsLoadStatus;
     }
 
-    public void initAppStartRecordHelper(){
-       setAppStartRecordsLoadStatus(LoadStatus.NOT_LOADED);
+    private void initAppStartRecordHelper() {
+        setAppStartRecordsLoadStatus(LoadStatus.NOT_LOADED);
     }
-    
-    public boolean startLoadAppStartRecord(){
+
+    public boolean startLoadAppStartRecord() {
 //        if(true==isAppStartRecordLoading()){
 //            return false;
 //        }
 //
-        mLoadAppStartRecordTask=new AsyncTask<Object, Object, List<AppStartRecord>>(){
+        mLoadAppStartRecordTask = new AsyncTask<Object, Object, List<AppStartRecord>>() {
 
             @Override
             protected List<AppStartRecord> doInBackground(Object... params) {
@@ -68,14 +63,14 @@ public class AppStartRecordHelper {
             @Override
             protected void onPostExecute(List<AppStartRecord> result) {
                 parseAppStartRecord(result);
-                mLoadAppStartRecordTask=null;
+                mLoadAppStartRecordTask = null;
                 super.onPostExecute(result);
-               
+
             }
-            
-           
+
+
         }.execute();
-        
+
         return true;
     }
 
@@ -83,23 +78,23 @@ public class AppStartRecordHelper {
 //        return ((null!=mLoadAppStartRecordTask)&&(mLoadAppStartRecordTask.getStatus()==Status.RUNNING));
 //
 //    }
-    
-    public List<AppStartRecord> loadAppStartRecord(){
+
+    private List<AppStartRecord> loadAppStartRecord() {
         setAppStartRecordsLoadStatus(LoadStatus.LOADING);
-    return     AppStartRecordDataBaseHelper.mInstance.queryAllStocks();
+        return AppStartRecordDataBaseHelper.mInstance.queryAllStocks();
     }
-    
-    public void parseAppStartRecord(List<AppStartRecord> appStartRecords){
-        if(appStartRecords.size()<1){
+
+    private void parseAppStartRecord(List<AppStartRecord> appStartRecords) {
+        if (appStartRecords.size() < 1) {
             setAppStartRecordsLoadStatus(LoadStatus.NOT_LOADED);
-              onAppStartRecordFailed();
+            onAppStartRecordFailed();
             return;
         }
         mAppStartRecords.clear();
         mAppStartRecords.addAll(appStartRecords);
-        
+
         setAppStartRecordsLoadStatus(LoadStatus.LOAD_FINISH);
-           onAppStartRecordSuccess();
+        onAppStartRecordSuccess();
 
     }
 }

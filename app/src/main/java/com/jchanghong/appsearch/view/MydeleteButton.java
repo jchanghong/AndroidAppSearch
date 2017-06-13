@@ -16,10 +16,11 @@ public class MydeleteButton extends View {
         super(context, attrs);
     }
 
+    private Paint paint = new Paint();
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(100,100);
+        setMeasuredDimension(100, 100);
     }
 
     @Override
@@ -34,11 +35,10 @@ public class MydeleteButton extends View {
         //圆心的纵坐标为当前的View的顶部起始位置+半径
         int centerY = getTop() + r;
 
-        Paint paint = new Paint();
         paint.setStrokeWidth(4);
         paint.setColor(Color.BLACK);
-        canvas.drawLine(r4,r4,r-r4,r-r4,paint);
-        canvas.drawLine(r4,r-r4,r-r4,r4,paint);
+        canvas.drawLine(r4, r4, r - r4, r - r4, paint);
+        canvas.drawLine(r4, r - r4, r - r4, r4, paint);
         //开始绘制
 //        canvas.drawCircle(centerX, centerY, r, paint);
 

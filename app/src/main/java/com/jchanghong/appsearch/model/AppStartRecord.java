@@ -1,15 +1,13 @@
-
 package com.jchanghong.appsearch.model;
 
 public class AppStartRecord {
-	private String mKey;
+    private String mKey;
     private long mStartTime;
 
-   
 
     public AppStartRecord() {
         super();
-       setStartTime(0);
+        setStartTime(0);
     }
 
     public AppStartRecord(String key, long startTime) {
@@ -20,14 +18,14 @@ public class AppStartRecord {
     }
 
     public String getKey() {
-		return mKey;
-	}
+        return mKey;
+    }
 
-	public void setKey(String key) {
-		mKey = key;
-	}
+    public void setKey(String key) {
+        mKey = key;
+    }
 
-	public long getStartTime() {
+    public long getStartTime() {
         return mStartTime;
     }
 
