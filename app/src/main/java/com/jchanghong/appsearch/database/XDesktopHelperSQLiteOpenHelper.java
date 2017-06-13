@@ -31,7 +31,6 @@ public class XDesktopHelperSQLiteOpenHelper extends SQLiteOpenHelper {
                 XDesktopHelperDatabase.DB_VERSION);
         // Log.i(TAG, "DB_NAME:"+OscillationWaveDatabase.DB_NAME);
     }
-
     public static synchronized XDesktopHelperSQLiteOpenHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.

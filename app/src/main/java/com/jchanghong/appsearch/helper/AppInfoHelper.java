@@ -29,7 +29,7 @@ import java.util.*;
 public class AppInfoHelper {
     private static final Character THE_LAST_ALPHABET = Constant.z;
     public static final AppInfoHelper mInstance = new AppInfoHelper();
-    private Context mContext;
+    public Context mContext;
     private AppType mCurrentAppType;
     private List<AppInfo> mBaseAllAppInfos;
     private LoadStatus mBaseAllAppInfosLoadStatus;

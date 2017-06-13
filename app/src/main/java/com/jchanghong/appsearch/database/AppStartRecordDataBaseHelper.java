@@ -13,15 +13,10 @@ import java.util.List;
 
 public class AppStartRecordDataBaseHelper {
     public static final AppStartRecordDataBaseHelper mInstance = new AppStartRecordDataBaseHelper();
-    private XDesktopHelperSQLiteOpenHelper mXDesktopHelperSQLiteOpenHelper;
+    public XDesktopHelperSQLiteOpenHelper mXDesktopHelperSQLiteOpenHelper;
 
 
     private AppStartRecordDataBaseHelper() {
-        initAppStartRecordDateBaseHelper();
-    }
-
-    private void initAppStartRecordDateBaseHelper() {
-        mXDesktopHelperSQLiteOpenHelper = XDesktopHelperSQLiteOpenHelper.getInstance(XDesktopHelperApplication.mcontext);
     }
 
     /*start: create database*/
