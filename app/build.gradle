@@ -5,6 +5,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
+
         applicationId "com.jchanghong.appsearch"
         minSdkVersion 24
         targetSdkVersion 26
