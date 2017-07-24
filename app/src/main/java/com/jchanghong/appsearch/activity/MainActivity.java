@@ -2,6 +2,7 @@ package com.jchanghong.appsearch.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -30,6 +31,12 @@ public class MainActivity extends Activity
 
         AppInfoHelper.mInstance.mOnAppInfoLoad = this;
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        System.out.println("onnewintent");
     }
 
     @Override

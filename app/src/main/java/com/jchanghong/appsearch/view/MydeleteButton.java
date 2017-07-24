@@ -32,9 +32,9 @@ public class MydeleteButton extends View {
         int r = getMeasuredWidth();//也可以是getMeasuredHeight()/2,本例中我们已经将宽高设置相等了
         int r4 = r / 4;
         //圆心的横坐标为当前的View的左边起始位置+半径
-        int centerX = getLeft() + r;
+//        int centerX = getLeft() + r;
         //圆心的纵坐标为当前的View的顶部起始位置+半径
-        int centerY = getTop() + r;
+//        int centerY = getTop() + r;
 
         paint.setStrokeWidth(4);
         paint.setColor(Color.BLACK);
