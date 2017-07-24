@@ -104,6 +104,13 @@ public class MainActivity extends Activity
 
     @Override
     public void onDialInputTextChanged(String curCharacter) {
+        if (AppStartRecordHelper.mInstance.mrecords == null) {
+            AppStartRecordHelper.mInstance.startLoadAppStartRecord();
+        }
+        if (!AppInfoHelper.mInstance.loaded()) {
+            XDesktopHelperService.startService(getApplicationContext());
+        }
+        initData();
         search(curCharacter);
         refreshT9SearchGv();
 
@@ -130,6 +137,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onAppInfoLoadSuccess() {
+        search("");
         refreshT9SearchGv();
     }
 
