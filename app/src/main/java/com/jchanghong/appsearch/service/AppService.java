@@ -31,14 +31,13 @@ public class AppService extends Service {
         context.startService(intent1);
 
     }
-
-    public List<AppInfo> appInfoList;
     public Ondata ondata;
+    /**
+     * 只作为通知，具体数据保存在各种的helper类里面*/
     public interface Ondata {
         void onAppinfo(List<AppInfo> list);
-
         void onAppinfoChanged();
-        void onrecode(List<AppStartRecord> list);
+        void onrecodeUpdate();
     }
 
     public class MYBinder extends Binder {
@@ -54,11 +53,9 @@ public class AppService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        recordHelper = new AppStartRecordHelper(this);
         AppInfoHelper.OnAppInfoLoad onAppInfoLoad = new AppInfoHelper.OnAppInfoLoad() {
             @Override
             public void onAppInfoLoadSuccess(List<AppInfo> list) {
-                AppService.this.appInfoList = list;
                 if (AppService.this.ondata != null) {
                     AppService.this.ondata.onAppinfo(list);
                 }
@@ -69,26 +66,29 @@ public class AppService extends Service {
             }
         };
         appInfoHelper = new AppInfoHelper(this,onAppInfoLoad);
+        recordHelper = new AppStartRecordHelper(this);
         recordHelper.lister =new AppStartRecordHelper.OnRecordLister() {
             @Override
-            public void oncomplete(List<AppStartRecord> list) {
+            public void onUpdate() {
                 if (AppService.this.ondata != null) {
-                    AppService.this.ondata.onrecode(list);
+                    AppService.this.ondata.onrecodeUpdate();
                 }
             }
+
         };
+        appInfoHelper.startLoadAppInfo();
+        recordHelper.startLoadAppStartRecord();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent == null) {
-            appInfoHelper.startLoadAppInfo();
             return START_STICKY;
         }
         String action = intent.getStringExtra("action1");
         String packageName = intent.getStringExtra("name");
         if (action == null||packageName==null) {
-            appInfoHelper.startLoadAppInfo();
+//            appInfoHelper.startLoadAppInfo();
         }
         else {
             if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
@@ -99,7 +99,7 @@ public class AppService extends Service {
                     }
                 }
             } else if (action.equals(Intent.ACTION_PACKAGE_CHANGED)) {
-           appInfoHelper.startLoadAppInfo();
+//           appInfoHelper.startLoadAppInfo();
                 if (ondata != null) {
                     ondata.onAppinfoChanged();
                 }

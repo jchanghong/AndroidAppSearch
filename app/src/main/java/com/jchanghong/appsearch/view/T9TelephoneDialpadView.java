@@ -9,46 +9,29 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
 import com.jchanghong.appsearch.R;
 
 
 public class T9TelephoneDialpadView extends LinearLayout implements
         OnClickListener {
 
-    private final Context mContext;
-    public EditText mT9InputEt;
-    public OnT9TelephoneDialpadView mOnT9TelephoneDialpadView = null;
-    /**
-     * Inflate Custom T9 phone dialpad View hierarchy from the specified xml
-     * resource.
-     */
-    private View mDialpadView; // this Custom View As the T9TelephoneDialpadView
-    // of children
-    private MydeleteButton mDialDeleteBtn;
+    public EditText mT9InputEt;//输入框
+    public OntextChangedlister ontextChangedlister = null;//监听器
 
     public T9TelephoneDialpadView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
-        initView();
-        initListener();
-
-    }
-
-    private void initView() {
-        LayoutInflater inflater = (LayoutInflater) mContext
+        LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mDialpadView = inflater.inflate(R.layout.t9_telephone_dialpad_layout,
+        View mDialpadView = inflater.inflate(R.layout.t9_telephone_dialpad_layout,
                 this);
 
-        mDialDeleteBtn = mDialpadView
+        MydeleteButton mDialDeleteBtn = mDialpadView
                 .findViewById(R.id.dial_delete_btn);
 
         mT9InputEt = mDialpadView
                 .findViewById(R.id.dial_input_edit_text);
         mT9InputEt.setCursorVisible(false);
-    }
-
-    private void initListener() {
         mDialDeleteBtn.setOnClickListener(this);
         for (int i = 0; i < 9; i++) {
             View v = mDialpadView.findViewById(R.id.dialNum1 + i);
@@ -74,18 +57,12 @@ public class T9TelephoneDialpadView extends LinearLayout implements
             @Override
             public void afterTextChanged(Editable s) {
                 String inputStr = s.toString();
-                mOnT9TelephoneDialpadView.onDialInputTextChanged(inputStr);
-                mT9InputEt.setSelection(inputStr.length());
+                ontextChangedlister.onInputTextChanged(inputStr);
             }
         });
-        mT9InputEt.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
+
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -115,11 +92,9 @@ public class T9TelephoneDialpadView extends LinearLayout implements
     private void addSingleDialCharacter(String addCharacter) {
         String preInputStr = mT9InputEt.getText().toString();
         mT9InputEt.setText(preInputStr + addCharacter);
-        mT9InputEt.setSelection(mT9InputEt.getText().length());
     }
 
-    public interface OnT9TelephoneDialpadView {
-        void onDialInputTextChanged(String curCharacter);
-
+    public interface OntextChangedlister {
+        void onInputTextChanged(String curCharacter);
     }
 }

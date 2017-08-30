@@ -6,19 +6,20 @@ import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.model.AppStartRecord;
 import com.jchanghong.appsearch.service.AppService;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //import android.util.Log;
 
 /**
  * 数据库中的记录*/
 public class AppStartRecordHelper {
-    private  List<AppStartRecord> mAppStartRecords = new ArrayList<>();
+    public Map<String, AppStartRecord> cache = new HashMap<>();
     private AppStartRecordDataBaseHelper helper;
     public OnRecordLister lister;
     public interface OnRecordLister {
-        void oncomplete(List<AppStartRecord> list);
+        void onUpdate();
     }
     private AppService service;
     public AppStartRecordHelper(AppService appService) {
@@ -26,7 +27,11 @@ public class AppStartRecordHelper {
         helper = new AppStartRecordDataBaseHelper(appService);
     }
 
-    public void indert(final AppStartRecord record) {
+    public void insert(final AppStartRecord record) {
+        cache.put(record.packet_name, record);
+        if (lister != null) {
+            lister.onUpdate();
+        }
         new AsyncTask<Void, Void, Void>() {
 
             @Override
@@ -40,6 +45,10 @@ public class AppStartRecordHelper {
     }
 
     public void remove(final String pcname) {
+        cache.remove(pcname);
+        if (lister != null) {
+            lister.onUpdate();
+        }
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
@@ -50,6 +59,7 @@ public class AppStartRecordHelper {
         }.execute();
     }
     private volatile boolean mloading = false;
+    /*只调用一次,通知数据*/
     public void startLoadAppStartRecord() {
         if (mloading) {
             return;
@@ -76,9 +86,11 @@ public class AppStartRecordHelper {
     }
 
     private void parseAppStartRecord(List<AppStartRecord> appStartRecords) {
-        mAppStartRecords = appStartRecords;
+        for (AppStartRecord record : appStartRecords) {
+            cache.put(record.packet_name, record);
+        }
         if (lister != null) {
-            lister.oncomplete(appStartRecords);
+            lister.onUpdate();
         }
     }
 }

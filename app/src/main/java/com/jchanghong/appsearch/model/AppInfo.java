@@ -3,7 +3,6 @@ package com.jchanghong.appsearch.model;
 import android.graphics.drawable.Drawable;
 
 import com.pinyinsearch.model.PinyinSearchUnit;
-import com.pinyinsearch.util.PinyinUtil;
 
 import java.util.Comparator;
 
@@ -23,7 +22,7 @@ public class AppInfo extends BaseAppInfo {
     public static final Comparator<AppInfo> mSortByTime = new Comparator<AppInfo>() {
         @Override
         public int compare(AppInfo lhs, AppInfo rhs) {
-            return (int) (lhs.mstartTime - rhs.mstartTime);
+            return (int) (rhs.mstartTime - lhs.mstartTime);
         }
     };
 

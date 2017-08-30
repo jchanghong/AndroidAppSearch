@@ -70,7 +70,7 @@ public class AppUtil {
                 AppStartRecord appStartRecord = new AppStartRecord(appInfo.mPackageName,
                         startTimeMs);
                 AppService service = (AppService) context;
-                service.recordHelper.indert(appStartRecord);
+                service.recordHelper.insert(appStartRecord);
                 appInfo.mstartTime = startTimeMs;
             }
         } else {

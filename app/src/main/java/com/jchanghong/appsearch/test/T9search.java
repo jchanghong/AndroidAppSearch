@@ -1,12 +1,11 @@
 package com.jchanghong.appsearch.test;
 
 import com.pinyinsearch.model.PinyinSearchUnit;
-import com.pinyinsearch.model.PinyinUnit;
 import com.pinyinsearch.util.PinyinUtil;
 import com.pinyinsearch.util.T9Util;
 
 /**
- * Created by jiang on 2017/8/30 0030.
+ * Created by jiang ontextChangedlister 2017/8/30 0030.
  */
 
 public class T9search {

@@ -10,7 +10,6 @@ import android.text.TextUtils;
 
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppInfo.SearchByType;
-import com.jchanghong.appsearch.model.Constant;
 import com.jchanghong.appsearch.service.AppService;
 import com.jchanghong.appsearch.util.AppUtil;
 import com.pinyinsearch.model.PinyinSearchUnit;

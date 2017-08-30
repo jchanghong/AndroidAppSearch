@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import com.jchanghong.appsearch.R;
 import com.jchanghong.appsearch.adapter.AppInfoAdapter;
@@ -27,12 +26,14 @@ import com.jchanghong.appsearch.util.AppUtil;
 import com.jchanghong.appsearch.view.T9TelephoneDialpadView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SuppressLint("ResourceAsColor")
 public class MainActivity extends Activity
         implements
-        T9TelephoneDialpadView.OnT9TelephoneDialpadView,ServiceConnection, AppService.Ondata {
+        T9TelephoneDialpadView.OntextChangedlister,ServiceConnection, AppService.Ondata {
+    private int initnumber = 2;//需要init的数量，当iniitnumber=0的时候就显示最后的数据，不然代表有异步任务没有完成
     private GridView mT9SearchGv;
     private AppInfoAdapter mAppInfoAdapter;
     private T9TelephoneDialpadView mT9TelephoneDialpadView;
@@ -43,9 +44,9 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
         mT9SearchGv = findViewById(R.id.t9_search_grid_view);
         mT9TelephoneDialpadView = findViewById(R.id.t9_telephone_dialpad_view);
-        mAppInfoAdapter = new AppInfoAdapter(this, empty);
-        mT9SearchGv.setAdapter(mAppInfoAdapter);
-        mT9TelephoneDialpadView.mOnT9TelephoneDialpadView = this;
+//        mAppInfoAdapter = new AppInfoAdapter(this, empty);
+//        mT9SearchGv.setAdapter(mAppInfoAdapter);
+        mT9TelephoneDialpadView.ontextChangedlister = this;
         Intent service = new Intent(this, AppService.class);
         startService(service);
         bindService(service, this, BIND_AUTO_CREATE);
@@ -53,10 +54,10 @@ public class MainActivity extends Activity
 
     //得到server以后
     private void initAfterServer() {
-        service.recordHelper.startLoadAppStartRecord();
-        if (!service.appInfoHelper.loaded()) {
-            service.appInfoHelper.startLoadAppInfo();
-        }
+//        service.recordHelper.startLoadAppStartRecord();
+//        if (!service.appInfoHelper.loaded()) {
+//            service.appInfoHelper.startLoadAppInfo();
+//        }
         initListener();
     }
 
@@ -111,6 +112,14 @@ public class MainActivity extends Activity
         });
     }
 
+    @Override
+    public void onInputTextChanged(String curCharacter) {
+        if (service == null) {
+            return;
+        }
+        search(curCharacter);
+    }
+
     class OnitemlongClick implements PopupMenu.OnMenuItemClickListener {
         AppInfo info;
         public OnitemlongClick(AppInfo appInfo) {
@@ -130,13 +139,6 @@ public class MainActivity extends Activity
         }
     }
     private static String debug = MainActivity.class.getName();
-    @Override
-    public void onDialInputTextChanged(String curCharacter) {
-        if (service == null) {
-            return;
-        }
-        search(curCharacter);
-    }
 
     private void search(String keyword) {
         if (TextUtils.isEmpty(keyword)) {
@@ -181,23 +183,35 @@ public class MainActivity extends Activity
     }
     @Override
     public void onAppinfo(List<AppInfo> list) {
-        mAppInfoAdapter.setmAppInfos(list);
-        refreshT9SearchGv();
+        initnumber--;
+        if (initnumber == 0) {
+            showinitview();
+        }
     }
+    //初始化完成后显示
+    private void showinitview() {
+        for (AppInfo appInfo : service.appInfoHelper.mBaseAllAppInfos) {
+            AppStartRecord record = service.recordHelper.cache.get(appInfo.mPackageName);
+            if (record != null) {
+                appInfo.mstartTime = record.mStartTime;
+            }
+        }
+        Collections.sort(service.appInfoHelper.mBaseAllAppInfos, AppInfo.mSortByTime);
+        mAppInfoAdapter = new AppInfoAdapter(this, new ArrayList<>(service.appInfoHelper.mBaseAllAppInfos));
+        mT9SearchGv.setAdapter(mAppInfoAdapter);
 
+    }
     @Override
     public void onAppinfoChanged() {
         mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mBaseAllAppInfos);
         Log.i(debug, "onAppinfoChanged");
         refreshT9SearchGv();
     }
-
     @Override
-    public void onrecode(List<AppStartRecord> list) {
-//        Log.i(debug, "onrecode:" + list.toString());
-        for (AppStartRecord appStartRecord : list) {
-            service.appInfoHelper.mBaseAllAppInfosHashMap.get(appStartRecord.packet_name).mstartTime = appStartRecord.mStartTime;
+    public void onrecodeUpdate() {
+        initnumber--;
+        if (initnumber == 0) {
+            showinitview();
         }
-        search("");
     }
 }

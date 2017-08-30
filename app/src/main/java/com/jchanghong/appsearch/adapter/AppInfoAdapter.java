@@ -12,7 +12,6 @@ import com.jchanghong.appsearch.R;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.util.ViewUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
