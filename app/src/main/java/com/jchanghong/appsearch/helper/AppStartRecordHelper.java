@@ -16,8 +16,8 @@ import java.util.Map;
  */
 public class AppStartRecordHelper {
     public final Map<String, AppStartRecord> cache = new HashMap<>();
-    public OnRecordLister lister;
     private final AppStartRecordDataBaseHelper helper;
+    public OnRecordLister lister;
     private volatile boolean mloading = false;
 
     public AppStartRecordHelper(AppService appService) {

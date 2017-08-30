@@ -8,7 +8,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,13 +41,11 @@ public class MainActivity extends Activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(debug, "oncreate");
+//        Log.i(debug, "oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mT9SearchGv = findViewById(R.id.t9_search_grid_view);
         mT9TelephoneDialpadView = findViewById(R.id.t9_telephone_dialpad_view);
-//        mAppInfoAdapter = new AppInfoAdapter(this, empty);
-//        mT9SearchGv.setAdapter(mAppInfoAdapter);
         mT9TelephoneDialpadView.ontextChangedlister = this;
         Intent service = new Intent(this, AppService.class);
         startService(service);
@@ -57,16 +54,12 @@ public class MainActivity extends Activity
 
     //得到server以后
     private void initAfterServer() {
-//        service.recordHelper.startLoadAppStartRecord();
-//        if (!service.appInfoHelper.loaded()) {
-//            service.appInfoHelper.startLoadAppInfo();
-//        }
         initListener();
     }
 
     @Override
     public void onBackPressed() {
-        Log.i(debug, "onbackpredded");
+//        Log.i(debug, "onbackpredded");
         runInBackgroud();
     }
 
@@ -85,10 +78,9 @@ public class MainActivity extends Activity
 
     @Override
     public void onResume() {
-        Log.i(debug, "onresume--------");
+//        Log.i(debug, "onresume--------");
         super.onResume();
         mT9TelephoneDialpadView.mT9InputEt.setText("");
-//        refreshT9SearchGv();
     }
 
     private void initListener() {
@@ -116,7 +108,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onInputTextChanged(String curCharacter) {
-        Log.i(debug, "oninputchanges---------");
+//        Log.i(debug, "oninputchanges---------");
         if (service == null) {
             return;
         }
@@ -125,7 +117,7 @@ public class MainActivity extends Activity
 
     private void search(String keyword) {
         if (TextUtils.isEmpty(keyword)) {
-            service.appInfoHelper.t9Search(null);
+            service.appInfoHelper.searchEmpty();
             mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mBaseAllAppInfos);
             refreshT9SearchGv();
         } else {
@@ -137,7 +129,7 @@ public class MainActivity extends Activity
 
     @Override
     protected void onDestroy() {
-        Log.i(debug, "ondestroy");
+//        Log.i(debug, "ondestroy");
         super.onDestroy();
         unbindService(this);
     }
@@ -152,24 +144,22 @@ public class MainActivity extends Activity
 
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-        Log.i(debug, "onServiceConnected");
+//        Log.i(debug, "onServiceConnected");
         service = ((AppService.MYBinder) iBinder).getserver();
-        service.ondata = this;
-        mAppInfoAdapter = new AppInfoAdapter(this, new ArrayList<>(service.appInfoHelper.mBaseAllAppInfos));
-        mT9SearchGv.setAdapter(mAppInfoAdapter);
         initAfterServer();
-
+        service.ondata = this;
+        service.initDataSyn();
     }
 
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
-        Log.i(debug, "onServiceDisconnected");
+//        Log.i(debug, "onServiceDisconnected");
         service = null;
     }
 
     @Override
     public void onAppinfo(List<AppInfo> list) {
-        Log.i(debug, "onAppinfo-");
+//        Log.i(debug, "onAppinfo-");
         initnumber--;
         if (initnumber == 0) {
             showinitview();
@@ -187,19 +177,18 @@ public class MainActivity extends Activity
         Collections.sort(service.appInfoHelper.mBaseAllAppInfos, AppInfo.mSortByTime);
         mAppInfoAdapter = new AppInfoAdapter(this, new ArrayList<>(service.appInfoHelper.mBaseAllAppInfos));
         mT9SearchGv.setAdapter(mAppInfoAdapter);
-
     }
 
     @Override
     public void onAppinfoChanged() {
         mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mBaseAllAppInfos);
-        Log.i(debug, "onAppinfoChanged");
+//        Log.i(debug, "onAppinfoChanged");
         refreshT9SearchGv();
     }
 
     @Override
     public void onrecodeUpdate() {
-        Log.i(debug, "onrecodeUpdate");
+//        Log.i(debug, "onrecodeUpdate");
         initnumber--;
         if (initnumber == 0) {
             showinitview();

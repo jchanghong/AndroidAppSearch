@@ -22,12 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AppInfoHelper {
-    public final List<AppInfo> mT9SearchAppInfos = new ArrayList<>();
-    public final List<AppInfo> mBaseAllAppInfos = new ArrayList<>();
+    public final List<AppInfo> mT9SearchAppInfos = new ArrayList<>();//搜索用，搜索排序
+    public final List<AppInfo> mBaseAllAppInfos = new ArrayList<>();//全部列表，启动时间排序
     private final HashMap<String, AppInfo> mBaseAllAppInfosHashMap = new HashMap<>();
     private final AppService mContext;
     private final OnAppInfoLoad mOnAppInfoLoad;//回调
-    private final StringBuilder mFirstNoT9SearchResultInput = new StringBuilder();
     private volatile boolean mloading = false;
 
     public AppInfoHelper(AppService mContext, OnAppInfoLoad load) {
@@ -69,17 +68,10 @@ public class AppInfoHelper {
         it.addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> resolveInfos = pm.queryIntentActivities(it, 0);
         for (ResolveInfo ri : resolveInfos) {
-            boolean canLaunchTheMainActivity = AppUtil.appCanLaunchTheMainActivity(mContext, ri.activityInfo.packageName);
-            if (canLaunchTheMainActivity) {
-                AppInfo appInfo = getAppInfo(pm, ri);
-                if (appInfo.mPackageName.equals(context.getPackageName())) {
-                    break;
-                }
-                if (!TextUtils.isEmpty(appInfo.mLabel)) {
-                    PinyinUtil.parse(appInfo.mLabelPinyinSearchUnit);
-                    appInfos.add(appInfo);
-                }
-            }
+            AppInfo appInfo = getAppInfo(pm, ri);
+            PinyinUtil.parse(appInfo.mLabelPinyinSearchUnit);
+            appInfos.add(appInfo);
+//            Log.i("jchanghong", appInfo.toString());
         }
         return appInfos;
     }
@@ -90,15 +82,8 @@ public class AppInfoHelper {
     public void t9Search(String search) {
         List<AppInfo> baseAppInfos = mBaseAllAppInfos;
         if (TextUtils.isEmpty(search)) {
-            searchEmpty(baseAppInfos);
+            searchEmpty();
             return;
-        }
-        if (mFirstNoT9SearchResultInput.length() > 0) {
-            if (search.contains(mFirstNoT9SearchResultInput.toString())) {
-                return;
-            } else {
-                mFirstNoT9SearchResultInput.delete(0, mFirstNoT9SearchResultInput.length());
-            }
         }
         mT9SearchAppInfos.clear();
         for (AppInfo baseAppInfo : baseAppInfos) {
@@ -112,25 +97,20 @@ public class AppInfoHelper {
                 mT9SearchAppInfos.add(baseAppInfo);
             }
         }
-
-        if (mT9SearchAppInfos.size() <= 0) {
-            if (mFirstNoT9SearchResultInput.length() <= 0) {
-                mFirstNoT9SearchResultInput.append(search);
-            }
-        } else {
+        if (mT9SearchAppInfos.size() > 0) {
             Collections.sort(mT9SearchAppInfos, AppInfo.mSortBySearch);
         }
     }
 
     //最新记录
-    private void searchEmpty(List<AppInfo> baseAppInfos) {
-        for (AppInfo ai : baseAppInfos) {
+    public void searchEmpty() {
+        for (AppInfo ai : mBaseAllAppInfos) {
             ai.mSearchByType = (SearchByType.SearchByTIME);
             ai.clearMatchKeywords();
             ai.mMatchStartIndex = (-1);
             ai.mMatchLength = (0);
         }
-        Collections.sort(baseAppInfos, AppInfo.mSortByTime);
+        Collections.sort(mBaseAllAppInfos, AppInfo.mSortByTime);
     }
 
     public boolean isAppExist(String packageName) {
@@ -155,9 +135,6 @@ public class AppInfoHelper {
 
             if (null != resolveInfo) {
                 AppInfo appInfo = getAppInfo(pm, resolveInfo);
-                if (TextUtils.isEmpty(appInfo.mLabel)) {
-                    return;
-                }
                 mBaseAllAppInfosHashMap.put(appInfo.mPackageName, appInfo);
                 mBaseAllAppInfos.add(appInfo);
                 Collections.sort(mBaseAllAppInfos, AppInfo.mSortByTime);
@@ -183,9 +160,9 @@ public class AppInfoHelper {
 
     private void parseAppInfo(List<AppInfo> appInfos) {
 //		Log.i(TAG, "parseAppInfo");
-        if (null == appInfos || appInfos.size() < 1) {
-            return;
-        }
+//        if (null == appInfos || appInfos.size() < 1) {
+//            return;
+//        }
 
 //		Log.i(TAG, "before appInfos.size()"+ appInfos.size());
         mBaseAllAppInfos.clear();

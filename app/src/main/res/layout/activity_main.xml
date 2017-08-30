@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
->
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <GridView
-            android:id="@+id/t9_search_grid_view"
-            android:background="@color/bg"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="3"
-            android:layout_weight="1"
-    >
-    </GridView>
+        android:id="@+id/t9_search_grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/bg"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="3"></GridView>
+
     <com.jchanghong.appsearch.view.T9TelephoneDialpadView
-            android:id="@+id/t9_telephone_dialpad_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-    />
+        android:id="@+id/t9_telephone_dialpad_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.jchanghong.appsearch.helper.AppInfoHelper;
 import com.jchanghong.appsearch.helper.AppStartRecordHelper;
@@ -27,7 +26,7 @@ public class AppService extends Service {
         Intent intent1 = new Intent(context, AppService.class);
         intent1.putExtra("name", packageName);
         intent1.putExtra("action1", action);
-        Log.i(LOG, action + ":" + packageName);
+//        Log.i(LOG, action + ":" + packageName);
         intent1.setAction(AppService.ACTION_X_DESKTOP_HELPER_SERVICE);
         context.startService(intent1);
 
@@ -35,14 +34,14 @@ public class AppService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.i(LOG, "onbind---------");
+//        Log.i(LOG, "onbind---------");
         // TODO Auto-generated method stub
         return new MYBinder();
     }
 
     @Override
     public void onCreate() {
-        Log.i(LOG, "oncreate------");
+//        Log.i(LOG, "oncreate------");
         super.onCreate();
         AppInfoHelper.OnAppInfoLoad onAppInfoLoad = new AppInfoHelper.OnAppInfoLoad() {
             @Override
@@ -62,22 +61,26 @@ public class AppService extends Service {
                     AppService.this.ondata.onrecodeUpdate();
                 }
             }
-
         };
+    }
+
+    /**
+     * 异步得到数据
+     */
+    public void initDataSyn() {
         appInfoHelper.startLoadAppInfo();
         recordHelper.startLoadAppStartRecord();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(LOG, "onStartCommand");
+//        Log.i(LOG, "onStartCommand");
         if (intent == null) {
             return START_STICKY;
         }
         String action = intent.getStringExtra("action1");
         String packageName = intent.getStringExtra("name");
-        if (action !=null || packageName != null) {
-            assert action != null;
+        if (action != null && packageName != null) {
             switch (action) {
                 case Intent.ACTION_PACKAGE_ADDED:
                     if (!appInfoHelper.isAppExist(packageName)) {
@@ -88,7 +91,6 @@ public class AppService extends Service {
                     }
                     break;
                 case Intent.ACTION_PACKAGE_CHANGED:
-//           appInfoHelper.startLoadAppInfo();
                     if (ondata != null) {
                         ondata.onAppinfoChanged();
                     }

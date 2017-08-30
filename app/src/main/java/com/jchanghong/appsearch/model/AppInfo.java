@@ -27,8 +27,8 @@ public class AppInfo extends BaseAppInfo {
 
     public final String mkey; // as the sort key word
     public final PinyinSearchUnit mLabelPinyinSearchUnit;// save the mLabel converted to Pinyin characters.
-    public SearchByType mSearchByType; // Used to save the type of search
     public final StringBuilder mMatchKeywords;// Used to save the type of Match Keywords.(label)
+    public SearchByType mSearchByType; // Used to save the type of search
     public int mMatchStartIndex = -1;        //the match start  position of mMatchKeywords in original string(label).
     public int mMatchLength = 0;            //the match length of mMatchKeywords in original string(name or phoneNumber).
     public long mstartTime = 0L;
@@ -48,6 +48,11 @@ public class AppInfo extends BaseAppInfo {
 
     public void clearMatchKeywords() {
         mMatchKeywords.delete(0, mMatchKeywords.length());
+    }
+
+    @Override
+    public String toString() {
+        return mLabel + mPackageName;
     }
 
     public enum SearchByType {

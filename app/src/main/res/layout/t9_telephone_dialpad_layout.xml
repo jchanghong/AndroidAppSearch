@@ -1,131 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/bg"
-            android:gravity="center_horizontal"
-            android:baselineAligned="false">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg"
+        android:baselineAligned="false"
+        android:gravity="center_horizontal">
 
         <EditText
-                android:id="@+id/dial_input_edit_text"
-                android:background="@null"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/search_input_prompt"
-                android:text="3"
-                android:inputType="number"
-                android:layout_gravity="center_horizontal"
-                android:focusable="false"
-                android:clickable="false"
-                android:textAlignment="center"
-        />
+            android:id="@+id/dial_input_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@null"
+            android:clickable="false"
+            android:focusable="false"
+            android:hint="@string/search_input_prompt"
+            android:inputType="number"
+            android:text="3"
+            android:textAlignment="center" />
 
         <com.jchanghong.appsearch.view.MydeleteButton
-                android:id="@+id/dial_delete_btn"
-                android:background="@drawable/btn_selector"
-                android:layout_gravity="end"
-                android:clickable="true"
-                android:visibility="visible"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
+            android:id="@+id/dial_delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/btn_selector"
+            android:clickable="true"
+            android:visibility="visible" />
 
 
     </FrameLayout>
 
     <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.jchanghong.appsearch.view.MyButton
+            android:id="@+id/dialNum1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:tag="1"
+            android:text="1"
+            android:visibility="visible" />
 
         <com.jchanghong.appsearch.view.MyButton
-                android:id="@+id/dialNum1"
-                android:layout_width="wrap_content"
-                android:background="@drawable/btn_selector"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:tag="1" android:visibility="visible" android:text="1"/>
+            android:id="@+id/dialNum2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:tag="2"
+            android:text="2" />
 
         <com.jchanghong.appsearch.view.MyButton
-                android:id="@+id/dialNum2"
-                android:background="@drawable/btn_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:tag="2" android:text="2"/>
+            android:id="@+id/dialNum3"
 
-        <com.jchanghong.appsearch.view.MyButton
-                android:id="@+id/dialNum3"
-
-                android:background="@drawable/btn_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:tag="3" android:text="3"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:tag="3"
+            android:text="3" />
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.jchanghong.appsearch.view.MyButton
+            android:id="@+id/dialNum4"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:showDividers="none"
+            android:tag="4"
+            android:text="4" />
 
         <com.jchanghong.appsearch.view.MyButton
-                android:id="@+id/dialNum4"
-                android:layout_width="wrap_content"
-                android:background="@drawable/btn_selector"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:tag="4" android:text="4" android:showDividers="none"/>
+            android:id="@+id/dialNum5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:tag="5"
+            android:text="5" />
 
         <com.jchanghong.appsearch.view.MyButton
-                android:id="@+id/dialNum5"
-                android:layout_width="wrap_content"
-                android:background="@drawable/btn_selector"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:tag="5" android:text="5"/>
-
-        <com.jchanghong.appsearch.view.MyButton
-                android:id="@+id/dialNum6"
-                android:background="@drawable/btn_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:tag="6" android:text="6"/>
+            android:id="@+id/dialNum6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:tag="6"
+            android:text="6" />
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.jchanghong.appsearch.view.MyButton
+            android:id="@+id/dialNum7"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:tag="7"
+            android:text="7" />
 
         <com.jchanghong.appsearch.view.MyButton
-                android:id="@+id/dialNum7"
-                android:background="@drawable/btn_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:tag="7" android:text="7"/>
+            android:id="@+id/dialNum8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:tag="8"
+            android:text="8" />
 
         <com.jchanghong.appsearch.view.MyButton
-                android:id="@+id/dialNum8"
-                android:background="@drawable/btn_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:tag="8" android:text="8"/>
-
-        <com.jchanghong.appsearch.view.MyButton
-                android:id="@+id/dialNum9"
-                android:background="@drawable/btn_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:tag="9" android:text="9"/>
+            android:id="@+id/dialNum9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:tag="9"
+            android:text="9" />
     </LinearLayout>
 
 </LinearLayout>

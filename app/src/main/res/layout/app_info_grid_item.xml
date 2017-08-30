@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:padding="12dp"
-              android:descendantFocusability="blocksDescendants"
-              android:background="@color/bg"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical"
+    android:padding="12dp">
+
     <ImageView
-            android:id="@+id/icon_image_view"
-            android:contentDescription="@string/app_name"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" android:layout_gravity="center_horizontal"/>
+        android:id="@+id/icon_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/app_name" />
 
     <TextView
-            android:id="@+id/label_text_view"
-            android:background="@color/bg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="text"
-            android:gravity="center_horizontal"
-            android:textAlignment="center" android:layout_gravity="center_horizontal"/>
+        android:id="@+id/label_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/bg"
+        android:gravity="center_horizontal"
+        android:text="text"
+        android:textAlignment="center" />
 
 </LinearLayout>

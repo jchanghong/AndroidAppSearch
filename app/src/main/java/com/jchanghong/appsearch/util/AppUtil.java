@@ -53,7 +53,8 @@ public class AppUtil {
 
     /**
      * start app via appinfo入口
-     *  @param context
+     *
+     * @param context
      * @param appInfo
      */
     public static void startApp(Context context, AppInfo appInfo) {
@@ -76,7 +77,7 @@ public class AppUtil {
             Toast.makeText(context, R.string.the_app_has_been_launched, Toast.LENGTH_SHORT)
                     .show();
         }
-        return ;
+        return;
     }
 
     /**

@@ -13,7 +13,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    signingConfigs{
+    signingConfigs {
         release {
             storeFile file("jchanghong.jks")        //证书存放目录
             storePassword "123456"                               //密码
