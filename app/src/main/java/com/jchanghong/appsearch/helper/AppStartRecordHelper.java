@@ -29,7 +29,7 @@ public class AppStartRecordHelper {
     public AppStartRecordHelper(AppService appService) {
         service = appService;
         helper = new AppStartRecordDataBaseHelper();
-        helper.mXDesktopHelperSQLiteOpenHelper = SQLiteOpenHelper.getInstance(service);
+        helper.sqLiteOpenHelper = SQLiteOpenHelper.getInstance(service);
     }
     private void onAppStartRecordSuccess() {
         mrecords = new LinkedList<>();
@@ -66,7 +66,7 @@ public class AppStartRecordHelper {
     }
 
     private List<AppStartRecord> loadAppStartRecord() {
-        return helper.queryAllStocks();
+        return helper.queryALL();
     }
 
     private void parseAppStartRecord(List<AppStartRecord> appStartRecords) {

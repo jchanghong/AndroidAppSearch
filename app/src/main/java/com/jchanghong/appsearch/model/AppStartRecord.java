@@ -1,36 +1,12 @@
 package com.jchanghong.appsearch.model;
 
 public class AppStartRecord {
-    private String mKey;
-    private long mStartTime;
-
-
-    public AppStartRecord() {
-        super();
-        setStartTime(0);
-    }
+    public String packet_name;
+    public long mStartTime;
 
     public AppStartRecord(String key, long startTime) {
-        super();
-        mKey = key;
+        packet_name = key;
         mStartTime = startTime;
 
     }
-
-    public String getKey() {
-        return mKey;
-    }
-
-    public void setKey(String key) {
-        mKey = key;
-    }
-
-    public long getStartTime() {
-        return mStartTime;
-    }
-
-    public void setStartTime(long startTime) {
-        mStartTime = startTime;
-    }
-
 }

@@ -6,169 +6,91 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.jchanghong.appsearch.model.AppStartRecord;
+import com.jchanghong.appsearch.service.AppService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class AppStartRecordDataBaseHelper {
-    public SQLiteOpenHelper mXDesktopHelperSQLiteOpenHelper;
+    private SQLiteOpenHelper sqLiteOpenHelper;
 
-
-    public AppStartRecordDataBaseHelper() {
+    public AppStartRecordDataBaseHelper(AppService service) {
+        sqLiteOpenHelper = SQLiteOpenHelper.getInstance(service.getApplicationContext());
+        SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
+        db.close();
     }
 
-    /*start: create database*/
-    public void createDatabase() {
-        mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
-    }
-    /*end: create database*/
+    static private String[] appStartRecordColumns = {
+            Database.AppStartRecordColumns.PACKET_NAME,
+            Database.AppStartRecordColumns.START_TIME,
 
-    /*start: insert*/
-    private boolean insert(List<AppStartRecord> appStartRecords) {
-        boolean insertSuccess = false;
-        do {
-            if ((null == appStartRecords) || appStartRecords.size() < 1) {
-                insertSuccess = false;
-                break;
-            }
-
-            SQLiteDatabase db = mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
-            if (null != db) {
-                ContentValues conferenceMemberValues = new ContentValues();
-                for (AppStartRecord asr : appStartRecords) {
-                    conferenceMemberValues.clear();
-                    conferenceMemberValues.put(Database.AppStartRecordColumns.KEY, asr.getKey());
-                    conferenceMemberValues.put(Database.AppStartRecordColumns.START_TIME, asr.getStartTime());
-
-                    db.insert(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, null, conferenceMemberValues);
-                }
-                db.close();
-                insertSuccess = true;
-            }
-
-        } while (false);
-        return insertSuccess;
-    }
+    };
 
     public boolean insert(AppStartRecord appStartRecord) {
         boolean insertSuccess = false;
-        do {
-            if (null == appStartRecord) {
-                insertSuccess = false;
-                break;
-            }
-
-            List<AppStartRecord> appStartRecords = new ArrayList<>();
-            appStartRecords.add(appStartRecord);
-            insertSuccess = insert(appStartRecords);
-
-        } while (false);
-
+        SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
+        if (null != db) {
+            String whereClause = Database.AppStartRecordColumns.PACKET_NAME + " =?";
+            String[] whereArgs = new String[]{appStartRecord.packet_name};
+            db.delete(Database.Table.APP_START_RECORD_TABLE, whereClause, whereArgs);
+            ContentValues conferenceMemberValues = new ContentValues();
+            conferenceMemberValues.put(Database.AppStartRecordColumns.PACKET_NAME, appStartRecord.packet_name);
+            conferenceMemberValues.put(Database.AppStartRecordColumns.START_TIME, appStartRecord.mStartTime);
+            db.insert(Database.Table.APP_START_RECORD_TABLE, null, conferenceMemberValues);
+            db.close();
+            insertSuccess = true;
+        }
         return insertSuccess;
     }
 
     /*start: delete*/
-    public boolean delete(String key) {
+    public boolean delete(String packet_neme) {
         boolean deleteSuccess = false;
-        do {
-            if (TextUtils.isEmpty(key)) {
-                deleteSuccess = false;
-                break;
-            }
-
-            SQLiteDatabase db = mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
-            if (null != db) {
-                String whereClause = Database.AppStartRecordColumns.KEY + " =?";
-                String[] whereArgs = new String[]{key};
-                db.delete(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, whereClause, whereArgs);
-                db.close();
-                deleteSuccess = true;
-            }
-
-
-        } while (false);
-
-        return deleteSuccess;
-    }
-
-    public boolean delete(AppStartRecord appStartRecord) {
-        boolean deleteSuccess = false;
-        do {
-            if (null == appStartRecord) {
-                deleteSuccess = false;
-                break;
-            }
-
-            SQLiteDatabase db = mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
-            if (null != db) {
-                String whereClause = Database.AppStartRecordColumns.KEY + " =?";
-                String[] whereArgs = new String[]{appStartRecord.getKey()};
-                db.delete(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, whereClause, whereArgs);
-                db.close();
-                deleteSuccess = true;
-            }
-
-
-        } while (false);
-
-        return deleteSuccess;
-    }
-
-    public boolean deleteAll() {
-        boolean deleteSuccess = false;
-        do {
-            SQLiteDatabase db = mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
-            if (null != db) {
-                db.delete(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, null, null);
-                db.close();
-                deleteSuccess = true;
-            }
-
-
-        } while (false);
-
-        return deleteSuccess;
-    }
-    
-    /*end: delete*/
-
-    /*start: query*/
-    public List<AppStartRecord> queryAllStocks() {
-        List<AppStartRecord> stocks = new ArrayList<>();
-        SQLiteDatabase db = mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
-        if (null == db) {
-            return stocks;
+        if (TextUtils.isEmpty(packet_neme)) {
+            deleteSuccess = false;
+            return deleteSuccess;
         }
+        SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
+        if (null != db) {
+            String whereClause = Database.AppStartRecordColumns.PACKET_NAME + " =?";
+            String[] whereArgs = new String[]{packet_neme};
+            db.delete(Database.Table.APP_START_RECORD_TABLE, whereClause, whereArgs);
+            db.close();
+            deleteSuccess = true;
+        }
+        return deleteSuccess;
+    }
 
-        String[] appStartRecordColumns = {
-                Database.AppStartRecordColumns.KEY,
-                Database.AppStartRecordColumns.START_TIME,
+    /**
+     * 只执行一次 linlist
+     * start: query
+     */
+    public List<AppStartRecord> queryALL() {
 
-        };
+        List<AppStartRecord> cache = new ArrayList<>();
+        SQLiteDatabase db = sqLiteOpenHelper.getReadableDatabase();
+        if (null == db) {
+            return cache;
+        }
 
 //            String appStartRecordOrderBy=Database.AppStartRecordColumns.KEY+" ASC";//" DESC";
         String appStartRecordOrderBy = Database.AppStartRecordColumns.START_TIME + " DESC";//" DESC";
-        Cursor appStartRecordCursor = db.query(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, appStartRecordColumns, null, null, null, null, appStartRecordOrderBy);
+        Cursor appStartRecordCursor = db.query(Database.Table.APP_START_RECORD_TABLE, appStartRecordColumns, null, null, null, null, appStartRecordOrderBy);
         if (null != appStartRecordCursor) {
             int keyColumnIndex = appStartRecordCursor.getColumnIndex(appStartRecordColumns[0]);
             int startTimeColumnIndex = appStartRecordCursor.getColumnIndex(appStartRecordColumns[1]);
 
             while (appStartRecordCursor.moveToNext()) {
-                AppStartRecord appStartRecord = new AppStartRecord();
-
                 String key = appStartRecordCursor.getString(keyColumnIndex);
                 long startTime = appStartRecordCursor.getLong(startTimeColumnIndex);
-
-                appStartRecord.setKey(key);
-                appStartRecord.setStartTime(startTime);
-
-                stocks.add(appStartRecord);
+                AppStartRecord appStartRecord = new AppStartRecord(key, startTime);
+                cache.add(appStartRecord);
             }
             appStartRecordCursor.close();
         }
         db.close();
-        return stocks;
+        return cache;
     }
     /*end: delete*/
 
