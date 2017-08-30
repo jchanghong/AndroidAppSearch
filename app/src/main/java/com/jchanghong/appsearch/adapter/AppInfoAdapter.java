@@ -19,11 +19,11 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
     private final int mTextViewResourceId;
     private final List<AppInfo> mAppInfos;
 
-    public AppInfoAdapter(Context context, int textViewResourceId,
+    public AppInfoAdapter(Context context,
                           List<AppInfo> appInfos) {
-        super(context, textViewResourceId, appInfos);
+        super(context, R.layout.app_info_grid_item, appInfos);
         mContext = context;
-        mTextViewResourceId = textViewResourceId;
+        mTextViewResourceId = R.layout.app_info_grid_item;
         mAppInfos = appInfos;
 
     }
@@ -45,9 +45,9 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
             view = LayoutInflater.from(mContext).inflate(mTextViewResourceId,
                     null);
             viewHolder = new ViewHolder();
-            viewHolder.mIconIv = (ImageView) view
+            viewHolder.mIconIv = view
                     .findViewById(R.id.icon_image_view);
-            viewHolder.mLabelTv = (TextView) view
+            viewHolder.mLabelTv = view
                     .findViewById(R.id.label_text_view);
             view.setTag(viewHolder);
         } else {
@@ -63,7 +63,7 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
 
                 break;
             case SearchByNull:
-                ViewUtil.showTextNormal(viewHolder.mLabelTv, appInfo.getLabel());
+                viewHolder.mLabelTv.setText(appInfo.getLabel());
                 break;
             default:
                 break;

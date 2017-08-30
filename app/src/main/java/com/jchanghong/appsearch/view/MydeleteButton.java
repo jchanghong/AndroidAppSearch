@@ -8,14 +8,20 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class MydeleteButton extends View {
-    private Paint paint = new Paint();
+    private final Paint paint = new Paint();
 
     public MydeleteButton(Context context) {
         super(context);
+
+        paint.setStrokeWidth(4);
+        paint.setColor(Color.BLACK);
     }
 
     public MydeleteButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        paint.setStrokeWidth(4);
+        paint.setColor(Color.BLACK);
     }
 
     @Override
@@ -36,8 +42,6 @@ public class MydeleteButton extends View {
         //圆心的纵坐标为当前的View的顶部起始位置+半径
 //        int centerY = getTop() + r;
 
-        paint.setStrokeWidth(4);
-        paint.setColor(Color.BLACK);
         canvas.drawLine(r4, r4, r - r4, r - r4, paint);
         canvas.drawLine(r4, r - r4, r - r4, r4, paint);
         //开始绘制

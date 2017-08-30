@@ -17,6 +17,9 @@ import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.helper.AppStartRecordHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppStartRecord;
+import com.jchanghong.appsearch.service.AppService;
+
+import java.util.Collections;
 
 public class AppUtil {
     private static final String TAG = "AppUtil";
@@ -105,9 +108,10 @@ public class AppUtil {
                 long startTimeMs = System.currentTimeMillis();
                 AppStartRecord appStartRecord = new AppStartRecord(appInfo.getKey(),
                         startTimeMs);
-                AppStartRecordDataBaseHelper.mInstance.insert(appStartRecord);
-                if (AppStartRecordHelper.mInstance.mrecords != null) {
-                    AppStartRecordHelper.mInstance.mrecords.addFirst(appInfo.getKey());
+                AppService service = (AppService) context;
+                service.recordHelper.helper.insert(appStartRecord);
+                if (service.recordHelper.mrecords != null) {
+                    service.recordHelper.mrecords.addFirst(appInfo.getKey());
                 }
 //                            AppInfo ai = AppInfoHelper.mInstance.mBaseAllAppInfosHashMap
 //                                    .get(appInfo.getKey());

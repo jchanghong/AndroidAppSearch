@@ -6,14 +6,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
-import android.os.AsyncTask.Status;
 import android.text.TextUtils;
-import com.jchanghong.appsearch.activity.MainActivity;
+
 import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppInfo.SearchByType;
 import com.jchanghong.appsearch.model.Constant;
-import com.jchanghong.appsearch.model.LoadStatus;
+import com.jchanghong.appsearch.service.AppService;
 import com.jchanghong.appsearch.util.AppCommonWeightsUtil;
 import com.jchanghong.appsearch.util.AppUtil;
 import com.jchanghong.appsearch.util.StringUtil;
@@ -22,65 +21,70 @@ import com.pinyinsearch.util.PinyinUtil;
 import com.pinyinsearch.util.QwertyUtil;
 import com.pinyinsearch.util.T9Util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AppInfoHelper {
-    public static final AppInfoHelper mInstance = new AppInfoHelper();
     private static final Character THE_LAST_ALPHABET = Constant.z;
-    public Context mContext;
+    private AppService mContext;
     public List<AppInfo> mT9SearchAppInfos;
-    public OnAppInfoLoad mOnAppInfoLoad;
+    public OnAppInfoLoad mOnAppInfoLoad;//回调
 //    private AppType mCurrentAppType;
-    private List<AppInfo> mBaseAllAppInfos;
+    public List<AppInfo> mBaseAllAppInfos;
     private HashMap<String, AppInfo> mBaseAllAppInfosHashMap = null;
     private List<AppInfo> mQwertySearchAppInfos;
     private StringBuffer mFirstNoQwertySearchResultInput = null;
     private StringBuffer mFirstNoT9SearchResultInput = null;
     private AsyncTask<Object, Object, List<AppInfo>> mLoadAppInfoTask = null;
-    private boolean mAppInfoChanged = true;
 
-    private AppInfoHelper() {
+    private volatile boolean mloading = false;
+    public AppInfoHelper(AppService mContext) {
+        this.mContext = mContext;
         initAppInfoHelper();
     }
 
     private void initAppInfoHelper() {
-//        mCurrentAppType = AppType.ALL_APP;
-        clearAppInfoData();
+            mBaseAllAppInfos = new ArrayList<>();
+            mBaseAllAppInfosHashMap = new HashMap<>();
+            mQwertySearchAppInfos = new ArrayList<>();
+            mT9SearchAppInfos = new LinkedList<>();
+            mFirstNoQwertySearchResultInput = new StringBuffer();
+            mFirstNoT9SearchResultInput = new StringBuffer();
     }
 
     public boolean startLoadAppInfo() {
-        if (isAppInfoLoading()) {
-            return false;
-        }
-        if (!mAppInfoChanged) {
+        if (mloading) {
             return false;
         }
         clearAppInfoData();
         mLoadAppInfoTask = new AsyncTask<Object, Object, List<AppInfo>>() {
-
             @Override
             protected List<AppInfo> doInBackground(Object... params) {
                 // TODO Auto-generated method stub
+                mloading = true;
                 return loadAppInfo(mContext);
             }
-
             @Override
             protected void onPostExecute(List<AppInfo> result) {
                 super.onPostExecute(result);
                 parseAppInfo(result);
                 //setAppInfoChanged(false);
                 mLoadAppInfoTask = null;
+                mloading = false;
             }
 
         }.execute();
-        mAppInfoChanged = false;
         return true;
 
     }
 
     @SuppressLint("DefaultLocale")
     private List<AppInfo> loadAppInfo(Context context) {
-        List<AppInfo> appInfos = new ArrayList<AppInfo>();
+        List<AppInfo> appInfos = new ArrayList<>();
         List<AppInfo> kanjiStartAppInfos = new ArrayList<>();
         List<AppInfo> nonKanjiStartAppInfos = new ArrayList<>();
 
@@ -150,8 +154,8 @@ public class AppInfoHelper {
         return appInfos;
     }
 
-    public void t9Search(String search, boolean voiceSearch) {
-        List<AppInfo> baseAppInfos = getBaseAppInfo();
+    public void t9Search(String search) {
+        List<AppInfo> baseAppInfos = mBaseAllAppInfos;
         if (null != mT9SearchAppInfos) {
             mT9SearchAppInfos.clear();
         } else {
@@ -176,7 +180,7 @@ public class AppInfoHelper {
             PinyinSearchUnit labelPinyinSearchUnit = baseAppInfo.getLabelPinyinSearchUnit();
 
             boolean match;
-            if (voiceSearch) {
+            if (false) {
                 match = QwertyUtil.match(labelPinyinSearchUnit, search);
             } else {
                 match = T9Util.match(labelPinyinSearchUnit, search);
@@ -213,51 +217,37 @@ public class AppInfoHelper {
             ai.setMatchStartIndex(-1);
             ai.setMatchLength(0);
         }
-        if (AppStartRecordHelper.mInstance.mrecords == null) {
+        if (mContext.recordHelper.mrecords == null) {
             mT9SearchAppInfos.addAll(baseAppInfos);
             mFirstNoT9SearchResultInput.delete(0, mFirstNoT9SearchResultInput.length());
             Collections.sort(mT9SearchAppInfos, AppInfo.mSortByDefault);
             return;
         }
         LinkedHashSet set = new LinkedHashSet();
-        LinkedList<String> mrecords = AppStartRecordHelper.mInstance.mrecords;
+        LinkedList<String> mrecords = mContext.recordHelper.mrecords;
         for (String mrecord : mrecords) {
             AppInfo o = mBaseAllAppInfosHashMap.get(mrecord);
+            //noinspection unchecked
             set.add(o);
         }
+        //noinspection unchecked
         set.addAll(mBaseAllAppInfos);
-        MainActivity.mAppInfoAdapter.setmAppInfos(set.toArray());
+//        MainActivity.mAppInfoAdapter.setmAppInfos(set.toArray());
     }
 
     public boolean isAppExist(String packageName) {
         boolean appExist = false;
-            if (TextUtils.isEmpty(packageName)) {
-                appExist = false;
-                return appExist;
-            }
-
             for (AppInfo ai : mBaseAllAppInfos) {
                 if (ai.getPackageName().equals(packageName)) {
                     appExist = true;
                     break;
                 }
             }
-            /*if(mBaseAllAppInfosHashMap.containsKey(packageName+name)){
-			    appExist=true;
-			    break;
-			}*/
-
         return appExist;
     }
 
     public boolean add(String packageName) {
         boolean addSuccess = false;
-            if (TextUtils.isEmpty(packageName)) {
-                addSuccess = false;
-                return addSuccess;
-            }
-
-
             boolean canLaunchTheMainActivity = AppUtil.appCanLaunchTheMainActivity(mContext, packageName);
 
             if (canLaunchTheMainActivity) {
@@ -300,7 +290,7 @@ public class AppInfoHelper {
                 return resetSequenceSuccess;
             }
 
-            AppStartRecordDataBaseHelper.mInstance.delete(appInfo.getKey());
+        mContext.recordHelper.helper.delete(appInfo.getKey());
 
             if (mBaseAllAppInfosHashMap.containsKey(appInfo.getKey())) {
                 mBaseAllAppInfosHashMap.get(appInfo.getKey()).setCommonWeights(AppCommonWeightsUtil.COMMON_WEIGHTS_DEFAULT);
@@ -313,79 +303,52 @@ public class AppInfoHelper {
     }
 
     public boolean remove(String packageName) {
-        boolean removeSuccess;
-
-            if (TextUtils.isEmpty(packageName)) {
-                removeSuccess = false;
-                return removeSuccess;
+//            PackageManager pm = mContext.getPackageManager();
+//            Intent intent = new Intent();
+//            intent.setPackage(packageName);
+//            ResolveInfo resolveInfo = pm.resolveActivity(intent, 0);
+//            if (null != resolveInfo) {
+//                AppInfo appInfo = getAppInfo(pm, resolveInfo);
+//                if (null != appInfo) {
+//                    mContext.recordHelper.helper.delete(appInfo.getKey());
+//
+//                    mBaseAllAppInfosHashMap.remove(appInfo.getKey());
+//                }
+//            }
+//
+//            for (int i = 0; i < mBaseAllAppInfos.size(); i++) {
+//                if (mBaseAllAppInfos.get(i).getPackageName().equals(packageName)) {
+//                    mBaseAllAppInfos.remove(i);
+//                    break;
+//                }
+//            }
+//            removeSuccess = true;
+        AppInfo appInfo = null;
+        for (AppInfo mBaseAllAppInfo : mBaseAllAppInfos) {
+            if (mBaseAllAppInfo.getPackageName().equals(packageName)) {
+                appInfo = mBaseAllAppInfo;
+                break;
             }
-
-
-            PackageManager pm = mContext.getPackageManager();
-            Intent intent = new Intent();
-            intent.setPackage(packageName);
-            ResolveInfo resolveInfo = pm.resolveActivity(intent, 0);
-            if (null != resolveInfo) {
-                AppInfo appInfo = getAppInfo(pm, resolveInfo);
-                if (null != appInfo) {
-                    AppStartRecordDataBaseHelper.mInstance.delete(appInfo.getKey());
+        }
+        mBaseAllAppInfos.remove(appInfo);
+                    mContext.recordHelper.helper.delete(appInfo.getKey());
                     mBaseAllAppInfosHashMap.remove(appInfo.getKey());
-                }
-            }
-
-            for (int i = 0; i < mBaseAllAppInfos.size(); i++) {
-                if (mBaseAllAppInfos.get(i).getPackageName().equals(packageName)) {
-                    mBaseAllAppInfos.remove(i);
-                    break;
-                }
-            }
-            removeSuccess = true;
-        return removeSuccess;
+        return true;
     }
 
-
+/**
+ * 加载过*/
     public boolean loaded() {
-        return mBaseAllAppInfos != null & mBaseAllAppInfos.size() > 0;
+        return mBaseAllAppInfos != null && mBaseAllAppInfos.size() > 0;
     }
 
     private void clearAppInfoData() {
-
-        if (null == mBaseAllAppInfos) {
-            mBaseAllAppInfos = new ArrayList<>();
-        } else {
             mBaseAllAppInfos.clear();
-        }
-
-        if (null == mBaseAllAppInfosHashMap) {
-            mBaseAllAppInfosHashMap = new HashMap<>();
-        } else {
             mBaseAllAppInfosHashMap.clear();
-        }
-
-        if (null == mQwertySearchAppInfos) {
-            mQwertySearchAppInfos = new ArrayList<>();
-        } else {
             mQwertySearchAppInfos.clear();
-        }
-
-        if (null == mT9SearchAppInfos) {
-            mT9SearchAppInfos = new LinkedList<>();
-        } else {
             mT9SearchAppInfos.clear();
-        }
-
-        if (null == mFirstNoQwertySearchResultInput) {
-            mFirstNoQwertySearchResultInput = new StringBuffer();
-        } else {
             mFirstNoQwertySearchResultInput.delete(0, mFirstNoQwertySearchResultInput.length());
-        }
-
-        if (null == mFirstNoT9SearchResultInput) {
-            mFirstNoT9SearchResultInput = new StringBuffer();
-        } else {
             mFirstNoT9SearchResultInput.delete(0, mFirstNoT9SearchResultInput.length());
-        }
-
     }
 
     private AppInfo getAppInfo(PackageManager pm, ResolveInfo resolveInfo) {
@@ -400,10 +363,6 @@ public class AppInfoHelper {
         appInfo.setName(resolveInfo.activityInfo.name);
         return appInfo;
 
-    }
-
-    private boolean isAppInfoLoading() {
-        return ((null != mLoadAppInfoTask) && (mLoadAppInfoTask.getStatus() == Status.RUNNING));
     }
 
     private void parseAppInfo(List<AppInfo> appInfos) {
@@ -426,19 +385,13 @@ public class AppInfoHelper {
 
 //		Log.i(TAG, "after appInfos.size()"+ appInfos.size());
         if (null != mOnAppInfoLoad) {
-            mOnAppInfoLoad.onAppInfoLoadSuccess();
+            mOnAppInfoLoad.onAppInfoLoadSuccess(mBaseAllAppInfos);
         }
 
     }
 
-    private List<AppInfo> getBaseAppInfo() {
-        return mBaseAllAppInfos;
-    }
-
-
     public interface OnAppInfoLoad {
-        void onAppInfoLoadSuccess();
-
+        void onAppInfoLoadSuccess(List<AppInfo> list);
         void onAppInfoLoadFailed();
     }
 }

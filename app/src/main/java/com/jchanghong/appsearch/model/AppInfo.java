@@ -77,7 +77,7 @@ public class AppInfo extends BaseAppInfo {
         getMatchKeywords().delete(0, getMatchKeywords().length());
         setMatchStartIndex(-1);
         setMatchLength(0);
-        setSetToTop(0);
+        setSetToTop();
         setCommonWeights(0);
     }
 
@@ -90,7 +90,7 @@ public class AppInfo extends BaseAppInfo {
         getMatchKeywords().delete(0, getMatchKeywords().length());
         setMatchStartIndex(-1);
         setMatchLength(0);
-        setSetToTop(0);
+        setSetToTop();
         setCommonWeights(0);
     }
 
@@ -155,8 +155,8 @@ public class AppInfo extends BaseAppInfo {
         return mSetToTop;
     }
 
-    public void setSetToTop(long setToTop) {
-        mSetToTop = setToTop;
+    private void setSetToTop() {
+        mSetToTop = (long) 0;
     }
 
     public long getCommonWeights() {

@@ -40,10 +40,10 @@ public class T9TelephoneDialpadView extends LinearLayout implements
         mDialpadView = inflater.inflate(R.layout.t9_telephone_dialpad_layout,
                 this);
 
-        mDialDeleteBtn = (MydeleteButton) mDialpadView
+        mDialDeleteBtn = mDialpadView
                 .findViewById(R.id.dial_delete_btn);
 
-        mT9InputEt = (EditText) mDialpadView
+        mT9InputEt = mDialpadView
                 .findViewById(R.id.dial_input_edit_text);
         mT9InputEt.setCursorVisible(false);
     }

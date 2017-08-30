@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
-import com.jchanghong.appsearch.application.XDesktopHelperApplication;
+
 import com.jchanghong.appsearch.model.AppStartRecord;
 
 import java.util.ArrayList;
@@ -12,11 +12,10 @@ import java.util.List;
 
 
 public class AppStartRecordDataBaseHelper {
-    public static final AppStartRecordDataBaseHelper mInstance = new AppStartRecordDataBaseHelper();
     public XDesktopHelperSQLiteOpenHelper mXDesktopHelperSQLiteOpenHelper;
 
 
-    private AppStartRecordDataBaseHelper() {
+    public AppStartRecordDataBaseHelper() {
     }
 
     /*start: create database*/

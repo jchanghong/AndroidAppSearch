@@ -1,8 +1,11 @@
 package com.jchanghong.appsearch.helper;
 
 import android.os.AsyncTask;
+
 import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
+import com.jchanghong.appsearch.database.XDesktopHelperSQLiteOpenHelper;
 import com.jchanghong.appsearch.model.AppStartRecord;
+import com.jchanghong.appsearch.service.AppService;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -11,17 +14,23 @@ import java.util.List;
 
 //import android.util.Log;
 
-
+/**
+ * 数据库中的记录*/
 public class AppStartRecordHelper {
-    public static final AppStartRecordHelper mInstance = new AppStartRecordHelper();
-    private final List<AppStartRecord> mAppStartRecords = new ArrayList<>();
+    private  List<AppStartRecord> mAppStartRecords = new ArrayList<>();
     public LinkedList<String> mrecords = null;
-    private AsyncTask<Object, Object, List<AppStartRecord>> mLoadAppStartRecordTask = null;
-
-    private AppStartRecordHelper() {
-        initAppStartRecordHelper();
+    public static AppStartRecordDataBaseHelper helper;
+    public OnRecordLister lister;
+    public interface OnRecordLister {
+        void oncomplete(List<AppStartRecord> list);
     }
 
+    private AppService service;
+    public AppStartRecordHelper(AppService appService) {
+        service = appService;
+        helper = new AppStartRecordDataBaseHelper();
+        helper.mXDesktopHelperSQLiteOpenHelper = XDesktopHelperSQLiteOpenHelper.getInstance(service);
+    }
     private void onAppStartRecordSuccess() {
         mrecords = new LinkedList<>();
         LinkedHashSet<String> set = new LinkedHashSet<>();
@@ -33,50 +42,39 @@ public class AppStartRecordHelper {
         }
     }
 
-    private void onAppStartRecordFailed() {
-
-    }
-
-    private void initAppStartRecordHelper() {
-
-    }
-
+    private volatile boolean mloading = false;
     public boolean startLoadAppStartRecord() {
-
-        mLoadAppStartRecordTask = new AsyncTask<Object, Object, List<AppStartRecord>>() {
-
-            @Override
-            protected List<AppStartRecord> doInBackground(Object... params) {
-                // TODO Auto-generated method stub
-                return loadAppStartRecord();
-            }
-
-            @Override
-            protected void onPostExecute(List<AppStartRecord> result) {
-                parseAppStartRecord(result);
-                mLoadAppStartRecordTask = null;
-                super.onPostExecute(result);
-
-            }
-
-
-        }.execute();
+        if (mloading) {
+            return false;
+        }
+            new AsyncTask<Object, Object, List<AppStartRecord>>() {
+                @Override
+                protected List<AppStartRecord> doInBackground(Object... params) {
+                    mloading = true;
+                    // TODO Auto-generated method stub
+                    return loadAppStartRecord();
+                }
+                @Override
+                protected void onPostExecute(List<AppStartRecord> result) {
+                    super.onPostExecute(result);
+                    parseAppStartRecord(result);
+                    mloading = false;
+                }
+            }.execute();
 
         return true;
     }
 
     private List<AppStartRecord> loadAppStartRecord() {
-        return AppStartRecordDataBaseHelper.mInstance.queryAllStocks();
+        return helper.queryAllStocks();
     }
 
     private void parseAppStartRecord(List<AppStartRecord> appStartRecords) {
-        if (appStartRecords==null) {
-            onAppStartRecordFailed();
-            return;
+        mAppStartRecords = appStartRecords;
+        if (lister != null) {
+            onAppStartRecordSuccess();
+            lister.oncomplete(appStartRecords);
         }
-        mAppStartRecords.clear();
-        mAppStartRecords.addAll(appStartRecords);
-        onAppStartRecordSuccess();
 
     }
 }
