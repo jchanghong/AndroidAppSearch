@@ -12,13 +12,15 @@ import com.jchanghong.appsearch.R;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.util.ViewUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
     private final Context mContext;
     private final int mTextViewResourceId;
     private final List<AppInfo> mAppInfos;
-
+/**
+ * 保护copy*/
     public AppInfoAdapter(Context context,
                           List<AppInfo> appInfos) {
         super(context, R.layout.app_info_grid_item, appInfos);
@@ -28,10 +30,11 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
 
     }
 
-    public void setmAppInfos(Object[] appInfos) {
+
+    public void setmAppInfos(List<AppInfo> newinfo) {
         mAppInfos.clear();
-        for (Object info : appInfos) {
-            mAppInfos.add((AppInfo) info);
+        for (AppInfo appInfo : newinfo) {
+            mAppInfos.add(appInfo);
         }
     }
 
@@ -55,15 +58,14 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.mIconIv.setBackground(appInfo.getIcon());
-        switch (appInfo.getSearchByType()) {
+        viewHolder.mIconIv.setBackground(appInfo.mIcon);
+        switch (appInfo.mSearchByType) {
             case SearchByLabel:
-                ViewUtil.showTextHighlight(viewHolder.mLabelTv, appInfo.getLabel(),
-                        appInfo.getMatchKeywords().toString());
-
+                ViewUtil.showTextHighlight(viewHolder.mLabelTv, appInfo.mLabel,
+                        appInfo.mMatchKeywords.toString());
                 break;
-            case SearchByNull:
-                viewHolder.mLabelTv.setText(appInfo.getLabel());
+            case SearchByTIME:
+                viewHolder.mLabelTv.setText(appInfo.mLabel);
                 break;
             default:
                 break;

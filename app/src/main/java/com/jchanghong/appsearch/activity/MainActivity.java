@@ -51,12 +51,12 @@ public class MainActivity extends Activity
         bindService(service, this, BIND_AUTO_CREATE);
     }
 
+    //得到server以后
     private void initAfterServer() {
-            service.recordHelper.startLoadAppStartRecord();
+        service.recordHelper.startLoadAppStartRecord();
         if (!service.appInfoHelper.loaded()) {
             service.appInfoHelper.startLoadAppInfo();
         }
-        mT9SearchGv.setAdapter(mAppInfoAdapter);
         initListener();
     }
 
@@ -82,7 +82,7 @@ public class MainActivity extends Activity
     public void onResume() {
         super.onResume();
         mT9TelephoneDialpadView.mT9InputEt.setText("");
-        refreshT9SearchGv();
+//        refreshT9SearchGv();
     }
 
   private   List<AppInfo> empty = new ArrayList<>();
@@ -132,30 +132,20 @@ public class MainActivity extends Activity
     private static String debug = MainActivity.class.getName();
     @Override
     public void onDialInputTextChanged(String curCharacter) {
-//        if (AppStartRecordHelper.mInstance.mrecords == null) {
-//            AppStartRecordHelper.mInstance.startLoadAppStartRecord();
-//        }
-//        if (AppInfoHelper.mInstance.loaded()) {
-//            AppService.startService(getApplicationContext());
-//        }
         if (service == null) {
             return;
         }
-//        Log.i(debug, curCharacter+"     textchange");
-//        initData();
         search(curCharacter);
-
     }
 
     private void search(String keyword) {
         if (TextUtils.isEmpty(keyword)) {
             service.appInfoHelper.t9Search(null);
-            mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mBaseAllAppInfos.toArray());
+            mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mBaseAllAppInfos);
             refreshT9SearchGv();
         } else {
             service.appInfoHelper.t9Search(keyword);
-//            Log.i(debug, service.appInfoHelper.mT9SearchAppInfos.size()+"");
-            mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mT9SearchAppInfos.toArray());
+            mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mT9SearchAppInfos);
             refreshT9SearchGv();
         }
     }
@@ -166,11 +156,6 @@ public class MainActivity extends Activity
         unbindService(this);
     }
 
-    @Override
-    protected void onStop() {
-
-        super.onStop();
-    }
 
     private void refreshT9SearchGv() {
         if (service == null) {
@@ -184,7 +169,7 @@ public class MainActivity extends Activity
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         service = ((AppService.MYBinder) iBinder).getserver();
         service.ondata = this;
-        mAppInfoAdapter = new AppInfoAdapter(this,service.appInfoHelper.mT9SearchAppInfos);
+        mAppInfoAdapter = new AppInfoAdapter(this, new ArrayList<>(service.appInfoHelper.mBaseAllAppInfos));
         mT9SearchGv.setAdapter(mAppInfoAdapter);
         initAfterServer();
 
@@ -196,36 +181,23 @@ public class MainActivity extends Activity
     }
     @Override
     public void onAppinfo(List<AppInfo> list) {
-//        mAppInfoAdapter = new AppInfoAdapter(this, service.appInfoList
-//        );
-//        mT9SearchGv.setAdapter(mAppInfoAdapter);
-//        Log.d("changhong", list.toString());
-//        service.appInfoHelper.t9Search(null);
-        mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mBaseAllAppInfos.toArray());
+        mAppInfoAdapter.setmAppInfos(list);
         refreshT9SearchGv();
     }
 
     @Override
     public void onAppinfoChanged() {
-        mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mBaseAllAppInfos.toArray());
+        mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mBaseAllAppInfos);
         Log.i(debug, "onAppinfoChanged");
         refreshT9SearchGv();
     }
 
     @Override
     public void onrecode(List<AppStartRecord> list) {
-        Log.i(debug, "onrecode:" + list.toString());
-        List<AppInfo> recodeinfo = new ArrayList<>();
+//        Log.i(debug, "onrecode:" + list.toString());
         for (AppStartRecord appStartRecord : list) {
-            for (AppInfo mBaseAllAppInfo : service.appInfoHelper.mBaseAllAppInfos) {
-                if (mBaseAllAppInfo.getPackageName().equals(appStartRecord.packet_name)) {
-                    recodeinfo.add(mBaseAllAppInfo);
-                    break;
-                }
-            }
+            service.appInfoHelper.mBaseAllAppInfosHashMap.get(appStartRecord.packet_name).mstartTime = appStartRecord.mStartTime;
         }
-        service.appInfoHelper.mBaseAllAppInfos.removeAll(recodeinfo);
-        service.appInfoHelper.mBaseAllAppInfos.addAll(0, recodeinfo);
         search("");
     }
 }

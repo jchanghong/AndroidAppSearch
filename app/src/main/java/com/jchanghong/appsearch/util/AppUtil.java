@@ -1,54 +1,20 @@
 package com.jchanghong.appsearch.util;
 
-import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.widget.Toast;
+
 import com.jchanghong.appsearch.R;
-import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
-import com.jchanghong.appsearch.helper.AppStartRecordHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppStartRecord;
 import com.jchanghong.appsearch.service.AppService;
 
-import java.util.Collections;
-
 public class AppUtil {
-    private static final String TAG = AppUtil.class.getSimpleName();
-
-    /**
-     * Return true when start app success,otherwise return false.
-     *
-     * @param context
-     * @param packageName
-     * @return
-     */
-    public static boolean startApp(Context context, String packageName) {
-        boolean startAppSuccess = false;
-        do {
-            if ((null == context) || TextUtils.isEmpty(packageName)) {
-                break;
-            }
-
-            PackageManager pm = context.getPackageManager();
-            Intent intent = pm.getLaunchIntentForPackage(packageName);
-
-            if (null != intent) {
-                context.startActivity(intent);
-                startAppSuccess = true;
-            }
-        } while (false);
-
-        return startAppSuccess;
-    }
 
     /**
      * @param context
@@ -59,9 +25,9 @@ public class AppUtil {
 
     private static boolean startApp(Context context, String packageName, String cls) {
         boolean startAppSuccess = false;
-        do {
+
             if ((null == context) || TextUtils.isEmpty(packageName)) {
-                break;
+                return false;
             }
             ComponentName componet = new ComponentName(packageName, cls);
             Intent intent = createLaunchIntent(componet);
@@ -72,7 +38,6 @@ public class AppUtil {
             } else {
                 System.out.println("app not found");
             }
-        } while (false);
 
         return startAppSuccess;
     }
@@ -94,30 +59,19 @@ public class AppUtil {
      */
     public static boolean startApp(Context context, AppInfo appInfo) {
         boolean startAppSuccess = false;
-        if (!appInfo.getPackageName().equals(context.getPackageName())) {
-            startAppSuccess = AppUtil.startApp(context, appInfo.getPackageName(),
-                    appInfo.getName());
+        if (!appInfo.mPackageName.equals(context.getPackageName())) {
+            startAppSuccess = AppUtil.startApp(context, appInfo.mPackageName,
+                    appInfo.mName);
             if (!startAppSuccess) {
                 Toast.makeText(context, R.string.app_can_not_be_launched_directly,
                         Toast.LENGTH_SHORT).show();
             } else {
                 long startTimeMs = System.currentTimeMillis();
-                AppStartRecord appStartRecord = new AppStartRecord(appInfo.getKey(),
+                AppStartRecord appStartRecord = new AppStartRecord(appInfo.mPackageName,
                         startTimeMs);
                 AppService service = (AppService) context;
                 service.recordHelper.indert(appStartRecord);
-                service.recordHelper.startLoadAppStartRecord();
-//                            AppInfo ai = AppInfoHelper.mInstance.mBaseAllAppInfosHashMap
-//                                    .get(appInfo.getKey());
-//                            if (null != ai) {
-//                                ai.setCommonWeights(ai.getCommonWeights()
-//                                        + AppCommonWeightsUtil.getCommonWeights(startTimeMs));
-////                                Log.i(TAG, ai.getPackageName() + ":" + ai.getCommonWeights());
-//                                Collections.sort(AppInfoHelper.mInstance.mBaseAllAppInfos,
-//                                        AppInfo.mSortByDefault);
-//
-//                            }
-
+                appInfo.mstartTime = startTimeMs;
             }
         } else {
             Toast.makeText(context, R.string.the_app_has_been_launched, Toast.LENGTH_SHORT)
@@ -154,8 +108,8 @@ public class AppUtil {
      * @param appInfo
      */
     public static void uninstallApp(Context context, AppInfo appInfo) {
-            if (!appInfo.getPackageName().equals(context.getPackageName())) {
-                Uri packageUri = Uri.parse("package:" + appInfo.getPackageName());
+            if (!appInfo.mPackageName.equals(context.getPackageName())) {
+                Uri packageUri = Uri.parse("package:" + appInfo.mPackageName);
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_DELETE);
                 intent.setData(packageUri);
@@ -170,7 +124,7 @@ public class AppUtil {
     public static void viewApp(Context context, AppInfo appInfo) {
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse("package:" + appInfo.getPackageName()));
+        intent.setData(Uri.parse("package:" + appInfo.mPackageName));
         intent.putExtra("cmp", "com.android.settings/.applications.InstalledAppDetails");
         intent.addCategory("android.intent.category.DEFAULT");
         context.startActivity(intent);

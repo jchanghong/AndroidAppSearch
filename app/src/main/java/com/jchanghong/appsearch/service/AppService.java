@@ -54,9 +54,8 @@ public class AppService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        appInfoHelper = new AppInfoHelper(this);
         recordHelper = new AppStartRecordHelper(this);
-        appInfoHelper.mOnAppInfoLoad = new AppInfoHelper.OnAppInfoLoad() {
+        AppInfoHelper.OnAppInfoLoad onAppInfoLoad = new AppInfoHelper.OnAppInfoLoad() {
             @Override
             public void onAppInfoLoadSuccess(List<AppInfo> list) {
                 AppService.this.appInfoList = list;
@@ -64,12 +63,12 @@ public class AppService extends Service {
                     AppService.this.ondata.onAppinfo(list);
                 }
             }
-
             @Override
             public void onAppInfoLoadFailed() {
 
             }
         };
+        appInfoHelper = new AppInfoHelper(this,onAppInfoLoad);
         recordHelper.lister =new AppStartRecordHelper.OnRecordLister() {
             @Override
             public void oncomplete(List<AppStartRecord> list) {
