@@ -26,18 +26,18 @@ public class AppUtil {
     private static boolean startApp(Context context, String packageName, String cls) {
         boolean startAppSuccess = false;
 
-            if ((null == context) || TextUtils.isEmpty(packageName)) {
-                return false;
-            }
-            ComponentName componet = new ComponentName(packageName, cls);
-            Intent intent = createLaunchIntent(componet);
-            if (context.getPackageManager().getLaunchIntentForPackage(
-                    packageName) != null) {
-                context.startActivity(intent);
-                startAppSuccess = true;
-            } else {
-                System.out.println("app not found");
-            }
+        if ((null == context) || TextUtils.isEmpty(packageName)) {
+            return false;
+        }
+        ComponentName componet = new ComponentName(packageName, cls);
+        Intent intent = createLaunchIntent(componet);
+        if (context.getPackageManager().getLaunchIntentForPackage(
+                packageName) != null) {
+            context.startActivity(intent);
+            startAppSuccess = true;
+        } else {
+            System.out.println("app not found");
+        }
 
         return startAppSuccess;
     }
@@ -101,6 +101,7 @@ public class AppUtil {
 
         return canLaunchTheMainActivity;
     }
+
     /**
      * uninstall app via appInfo
      *
@@ -108,16 +109,16 @@ public class AppUtil {
      * @param appInfo
      */
     public static void uninstallApp(Context context, AppInfo appInfo) {
-            if (!appInfo.mPackageName.equals(context.getPackageName())) {
-                Uri packageUri = Uri.parse("package:" + appInfo.mPackageName);
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_DELETE);
-                intent.setData(packageUri);
-                context.startActivity(intent);
-            } else {
-                Toast.makeText(context, R.string.can_not_to_uninstall_yourself, Toast.LENGTH_SHORT)
-                        .show();
-            }
+        if (!appInfo.mPackageName.equals(context.getPackageName())) {
+            Uri packageUri = Uri.parse("package:" + appInfo.mPackageName);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_DELETE);
+            intent.setData(packageUri);
+            context.startActivity(intent);
+        } else {
+            Toast.makeText(context, R.string.can_not_to_uninstall_yourself, Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
 

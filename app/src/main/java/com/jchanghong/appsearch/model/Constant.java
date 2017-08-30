@@ -19,7 +19,7 @@ public interface Constant {
 //    char EXCLAMATION_MARK = '!';
 //    char QUOTATION_MARK = '"';
     char NUMBER_SIGN = '#';
-//    char DOLLAR_SIGN = '$';
+    //    char DOLLAR_SIGN = '$';
 //    char PERCENT_SIGN = '%';
 //    char AMPERSAND = '&';
 //    char APOSTROPHE = '\'';
@@ -49,7 +49,7 @@ public interface Constant {
 //    char QUESTION_MARK = '?';
 //    char AT_SIGN = '@';
     char A = 'A';
-//    char B = 'B';
+    //    char B = 'B';
 //    char C = 'C';
 //    char D = 'D';
 //    char E = 'E';
@@ -74,14 +74,14 @@ public interface Constant {
 //    char X = 'X';
 //    char Y = 'Y';
     char Z = 'Z';
-//    char LEFT_SQUARE_BRACKETS = '[';
+    //    char LEFT_SQUARE_BRACKETS = '[';
 //    char BACKSLASH = '\\';
 //    char RIGHT_SQUARE_BRACKETS = ']';
 //    char CARET = '^';
 //    char UNDERSCORE = '_';
 //    char GRAVE_ACCENT = '`';
     char a = 'a';
-//    char b = 'b';
+    //    char b = 'b';
 //    char c = 'c';
 //    char d = 'd';
 //    char e = 'e';

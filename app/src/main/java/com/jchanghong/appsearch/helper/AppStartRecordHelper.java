@@ -13,15 +13,15 @@ import java.util.Map;
 //import android.util.Log;
 
 /**
- * 数据库中的记录*/
+ * 数据库中的记录
+ */
 public class AppStartRecordHelper {
     public Map<String, AppStartRecord> cache = new HashMap<>();
-    private AppStartRecordDataBaseHelper helper;
     public OnRecordLister lister;
-    public interface OnRecordLister {
-        void onUpdate();
-    }
+    private AppStartRecordDataBaseHelper helper;
     private AppService service;
+    private volatile boolean mloading = false;
+
     public AppStartRecordHelper(AppService appService) {
         service = appService;
         helper = new AppStartRecordDataBaseHelper(appService);
@@ -58,27 +58,27 @@ public class AppStartRecordHelper {
             }
         }.execute();
     }
-    private volatile boolean mloading = false;
+
     /*只调用一次,通知数据*/
     public void startLoadAppStartRecord() {
         if (mloading) {
             return;
         }
-            new AsyncTask<Object, Object, List<AppStartRecord>>() {
-                @Override
-                protected List<AppStartRecord> doInBackground(Object... params) {
-                    mloading = true;
-                    // TODO Auto-generated method stub
-                    return loadAppStartRecord();
-                }
+        new AsyncTask<Object, Object, List<AppStartRecord>>() {
+            @Override
+            protected List<AppStartRecord> doInBackground(Object... params) {
+                mloading = true;
+                // TODO Auto-generated method stub
+                return loadAppStartRecord();
+            }
 
-                @Override
-                protected void onPostExecute(List<AppStartRecord> result) {
-                    super.onPostExecute(result);
-                    parseAppStartRecord(result);
-                    mloading = false;
-                }
-            }.execute();
+            @Override
+            protected void onPostExecute(List<AppStartRecord> result) {
+                super.onPostExecute(result);
+                parseAppStartRecord(result);
+                mloading = false;
+            }
+        }.execute();
     }
 
     private List<AppStartRecord> loadAppStartRecord() {
@@ -92,5 +92,9 @@ public class AppStartRecordHelper {
         if (lister != null) {
             lister.onUpdate();
         }
+    }
+
+    public interface OnRecordLister {
+        void onUpdate();
     }
 }

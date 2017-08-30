@@ -17,7 +17,7 @@ public class SQLiteOpenHelper extends android.database.sqlite.SQLiteOpenHelper {
                 Database.DB_VERSION);
     }
 
-    public static  SQLiteOpenHelper getInstance(Context context) {
+    public static SQLiteOpenHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx

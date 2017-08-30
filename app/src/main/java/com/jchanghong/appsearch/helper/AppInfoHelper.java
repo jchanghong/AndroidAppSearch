@@ -22,29 +22,31 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AppInfoHelper {
-    private AppService mContext;
-    public List<AppInfo> mT9SearchAppInfos=new ArrayList<>();
-    private OnAppInfoLoad mOnAppInfoLoad;//回调
-    public List<AppInfo> mBaseAllAppInfos=new ArrayList<>();
+    public List<AppInfo> mT9SearchAppInfos = new ArrayList<>();
+    public List<AppInfo> mBaseAllAppInfos = new ArrayList<>();
     public HashMap<String, AppInfo> mBaseAllAppInfosHashMap = new HashMap<>();
+    private AppService mContext;
+    private OnAppInfoLoad mOnAppInfoLoad;//回调
     private StringBuilder mFirstNoT9SearchResultInput = new StringBuilder();
     private volatile boolean mloading = false;
-    public AppInfoHelper(AppService mContext,OnAppInfoLoad load) {
+
+    public AppInfoHelper(AppService mContext, OnAppInfoLoad load) {
         this.mContext = mContext;
         mOnAppInfoLoad = load;
     }
 
     public void startLoadAppInfo() {
         if (mloading) {
-            return ;
+            return;
         }
-       new AsyncTask<Object, Object, List<AppInfo>>() {
+        new AsyncTask<Object, Object, List<AppInfo>>() {
             @Override
             protected List<AppInfo> doInBackground(Object... params) {
                 // TODO Auto-generated method stub
                 mloading = true;
                 return loadAppInfo(mContext);
             }
+
             @Override
             protected void onPostExecute(List<AppInfo> result) {
                 super.onPostExecute(result);
@@ -57,7 +59,8 @@ public class AppInfoHelper {
     }
 
     /**
-     * 后台加载-------------------*/
+     * 后台加载-------------------
+     */
     @SuppressLint("DefaultLocale")
     private List<AppInfo> loadAppInfo(Context context) {
         List<AppInfo> appInfos = new ArrayList<>();
@@ -71,8 +74,7 @@ public class AppInfoHelper {
                 AppInfo appInfo = getAppInfo(pm, ri);
                 if (TextUtils.isEmpty(appInfo.mLabel)) {
                     continue;
-                }
-                else {
+                } else {
                     PinyinUtil.parse(appInfo.mLabelPinyinSearchUnit);
                     appInfos.add(appInfo);
                 }
@@ -82,7 +84,8 @@ public class AppInfoHelper {
     }
 
     /**
-     * 设置t9list数据，view自己更新*/
+     * 设置t9list数据，view自己更新
+     */
     public void t9Search(String search) {
         List<AppInfo> baseAppInfos = mBaseAllAppInfos;
         if (TextUtils.isEmpty(search)) {
@@ -104,8 +107,8 @@ public class AppInfoHelper {
                 AppInfo appInfo = baseAppInfo;
                 appInfo.mSearchByType = SearchByType.SearchByLabel;
                 appInfo.setMatchKeywords(labelPinyinSearchUnit.getMatchKeyWord().toString());
-                appInfo.mMatchStartIndex=(appInfo.mLabel.indexOf(appInfo.mMatchKeywords.toString()));
-                appInfo.mMatchLength=(appInfo.mMatchKeywords.length());
+                appInfo.mMatchStartIndex = (appInfo.mLabel.indexOf(appInfo.mMatchKeywords.toString()));
+                appInfo.mMatchLength = (appInfo.mMatchKeywords.length());
                 mT9SearchAppInfos.add(appInfo);
             }
         }
@@ -115,7 +118,7 @@ public class AppInfoHelper {
                 mFirstNoT9SearchResultInput.append(search);
             }
         } else {
-                Collections.sort(mT9SearchAppInfos, AppInfo.mSortBySearch);
+            Collections.sort(mT9SearchAppInfos, AppInfo.mSortBySearch);
         }
     }
 
@@ -132,44 +135,44 @@ public class AppInfoHelper {
 
     public boolean isAppExist(String packageName) {
         boolean appExist = false;
-            for (AppInfo ai : mBaseAllAppInfos) {
-                if (ai.mPackageName.equals(packageName)) {
-                    appExist = true;
-                    break;
-                }
+        for (AppInfo ai : mBaseAllAppInfos) {
+            if (ai.mPackageName.equals(packageName)) {
+                appExist = true;
+                break;
             }
+        }
         return appExist;
     }
 
     public boolean add(String packageName) {
         boolean addSuccess = false;
-            boolean canLaunchTheMainActivity = AppUtil.appCanLaunchTheMainActivity(mContext, packageName);
+        boolean canLaunchTheMainActivity = AppUtil.appCanLaunchTheMainActivity(mContext, packageName);
 
-            if (canLaunchTheMainActivity) {
-                PackageManager pm = mContext.getPackageManager();
-                Intent intent = new Intent();
-                intent.setPackage(packageName);
-                ResolveInfo resolveInfo = pm.resolveActivity(intent, 0);
+        if (canLaunchTheMainActivity) {
+            PackageManager pm = mContext.getPackageManager();
+            Intent intent = new Intent();
+            intent.setPackage(packageName);
+            ResolveInfo resolveInfo = pm.resolveActivity(intent, 0);
 
-                if (null != resolveInfo) {
-                    AppInfo appInfo = getAppInfo(pm, resolveInfo);
-                    if (TextUtils.isEmpty(appInfo.mLabel)) {
-                        addSuccess = false;
-                        return addSuccess;
-                    }
-                    mBaseAllAppInfosHashMap.put(appInfo.mPackageName, appInfo);
-                    mBaseAllAppInfos.add(appInfo);
-                    Collections.sort(mBaseAllAppInfos, AppInfo.mSortByTime);
-                    addSuccess = true;
+            if (null != resolveInfo) {
+                AppInfo appInfo = getAppInfo(pm, resolveInfo);
+                if (TextUtils.isEmpty(appInfo.mLabel)) {
+                    addSuccess = false;
+                    return addSuccess;
                 }
+                mBaseAllAppInfosHashMap.put(appInfo.mPackageName, appInfo);
+                mBaseAllAppInfos.add(appInfo);
+                Collections.sort(mBaseAllAppInfos, AppInfo.mSortByTime);
+                addSuccess = true;
             }
+        }
 
         return addSuccess;
     }
 
 
     public boolean remove(String packageName) {
-      AppInfo v=  mBaseAllAppInfosHashMap.remove(packageName);
+        AppInfo v = mBaseAllAppInfosHashMap.remove(packageName);
         if (v != null) {
             mBaseAllAppInfos.remove(v);
         }
@@ -177,8 +180,9 @@ public class AppInfoHelper {
         return true;
     }
 
-/**
- * 加载过*/
+    /**
+     * 加载过
+     */
     public boolean loaded() {
         return mBaseAllAppInfos != null && mBaseAllAppInfos.size() > 0;
     }
@@ -215,6 +219,7 @@ public class AppInfoHelper {
 
     public interface OnAppInfoLoad {
         void onAppInfoLoadSuccess(List<AppInfo> list);
+
         void onAppInfoLoadFailed();
     }
 }

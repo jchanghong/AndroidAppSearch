@@ -13,6 +13,11 @@ import java.util.List;
 
 
 public class AppStartRecordDataBaseHelper {
+    static private String[] appStartRecordColumns = {
+            Database.AppStartRecordColumns.PACKET_NAME,
+            Database.AppStartRecordColumns.START_TIME,
+
+    };
     private SQLiteOpenHelper sqLiteOpenHelper;
 
     public AppStartRecordDataBaseHelper(AppService service) {
@@ -20,12 +25,6 @@ public class AppStartRecordDataBaseHelper {
         SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
         db.close();
     }
-
-    static private String[] appStartRecordColumns = {
-            Database.AppStartRecordColumns.PACKET_NAME,
-            Database.AppStartRecordColumns.START_TIME,
-
-    };
 
     public boolean insert(AppStartRecord appStartRecord) {
         boolean insertSuccess = false;

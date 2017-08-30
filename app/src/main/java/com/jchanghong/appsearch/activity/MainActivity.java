@@ -32,12 +32,15 @@ import java.util.List;
 @SuppressLint("ResourceAsColor")
 public class MainActivity extends Activity
         implements
-        T9TelephoneDialpadView.OntextChangedlister,ServiceConnection, AppService.Ondata {
+        T9TelephoneDialpadView.OntextChangedlister, ServiceConnection, AppService.Ondata {
+    private static String debug = MainActivity.class.getName();
     private int initnumber = 2;//需要init的数量，当iniitnumber=0的时候就显示最后的数据，不然代表有异步任务没有完成
     private GridView mT9SearchGv;
     private AppInfoAdapter mAppInfoAdapter;
     private T9TelephoneDialpadView mT9TelephoneDialpadView;
     private AppService service;
+    private List<AppInfo> empty = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,9 +89,6 @@ public class MainActivity extends Activity
 //        refreshT9SearchGv();
     }
 
-  private   List<AppInfo> empty = new ArrayList<>();
-
-
     private void initListener() {
         mT9SearchGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -120,26 +120,6 @@ public class MainActivity extends Activity
         search(curCharacter);
     }
 
-    class OnitemlongClick implements PopupMenu.OnMenuItemClickListener {
-        AppInfo info;
-        public OnitemlongClick(AppInfo appInfo) {
-            info = appInfo;
-        }
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            if (menuItem.getItemId() == R.id.item_view) {
-                AppUtil.viewApp(MainActivity.this, info);
-                return true;
-            }
-            if (menuItem.getItemId() == R.id.item_delete) {
-                AppUtil.uninstallApp(MainActivity.this, info);
-                return true;
-            }
-            return false;
-        }
-    }
-    private static String debug = MainActivity.class.getName();
-
     private void search(String keyword) {
         if (TextUtils.isEmpty(keyword)) {
             service.appInfoHelper.t9Search(null);
@@ -157,7 +137,6 @@ public class MainActivity extends Activity
         super.onDestroy();
         unbindService(this);
     }
-
 
     private void refreshT9SearchGv() {
         if (service == null) {
@@ -181,6 +160,7 @@ public class MainActivity extends Activity
     public void onServiceDisconnected(ComponentName componentName) {
         service = null;
     }
+
     @Override
     public void onAppinfo(List<AppInfo> list) {
         initnumber--;
@@ -188,6 +168,7 @@ public class MainActivity extends Activity
             showinitview();
         }
     }
+
     //初始化完成后显示
     private void showinitview() {
         for (AppInfo appInfo : service.appInfoHelper.mBaseAllAppInfos) {
@@ -201,17 +182,40 @@ public class MainActivity extends Activity
         mT9SearchGv.setAdapter(mAppInfoAdapter);
 
     }
+
     @Override
     public void onAppinfoChanged() {
         mAppInfoAdapter.setmAppInfos(service.appInfoHelper.mBaseAllAppInfos);
         Log.i(debug, "onAppinfoChanged");
         refreshT9SearchGv();
     }
+
     @Override
     public void onrecodeUpdate() {
         initnumber--;
         if (initnumber == 0) {
             showinitview();
+        }
+    }
+
+    class OnitemlongClick implements PopupMenu.OnMenuItemClickListener {
+        AppInfo info;
+
+        public OnitemlongClick(AppInfo appInfo) {
+            info = appInfo;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            if (menuItem.getItemId() == R.id.item_view) {
+                AppUtil.viewApp(MainActivity.this, info);
+                return true;
+            }
+            if (menuItem.getItemId() == R.id.item_delete) {
+                AppUtil.uninstallApp(MainActivity.this, info);
+                return true;
+            }
+            return false;
         }
     }
 }

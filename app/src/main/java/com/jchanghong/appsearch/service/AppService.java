@@ -10,7 +10,6 @@ import android.util.Log;
 import com.jchanghong.appsearch.helper.AppInfoHelper;
 import com.jchanghong.appsearch.helper.AppStartRecordHelper;
 import com.jchanghong.appsearch.model.AppInfo;
-import com.jchanghong.appsearch.model.AppStartRecord;
 
 import java.util.List;
 
@@ -20,7 +19,9 @@ public class AppService extends Service {
     private static String LOG = AppService.class.getSimpleName();
     public AppInfoHelper appInfoHelper;
     public AppStartRecordHelper recordHelper;
-    public static void startService(Context context,Intent intent) {
+    public Ondata ondata;
+
+    public static void startService(Context context, Intent intent) {
         String packageName = intent.getData().getSchemeSpecificPart();
         String action = intent.getAction();
         Intent intent1 = new Intent(context, AppService.class);
@@ -31,25 +32,13 @@ public class AppService extends Service {
         context.startService(intent1);
 
     }
-    public Ondata ondata;
-    /**
-     * 只作为通知，具体数据保存在各种的helper类里面*/
-    public interface Ondata {
-        void onAppinfo(List<AppInfo> list);
-        void onAppinfoChanged();
-        void onrecodeUpdate();
-    }
 
-    public class MYBinder extends Binder {
-      public   AppService getserver() {
-            return AppService.this;
-        }
-    }
     @Override
     public IBinder onBind(Intent intent) {
         // TODO Auto-generated method stub
         return new MYBinder();
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -60,14 +49,15 @@ public class AppService extends Service {
                     AppService.this.ondata.onAppinfo(list);
                 }
             }
+
             @Override
             public void onAppInfoLoadFailed() {
 
             }
         };
-        appInfoHelper = new AppInfoHelper(this,onAppInfoLoad);
+        appInfoHelper = new AppInfoHelper(this, onAppInfoLoad);
         recordHelper = new AppStartRecordHelper(this);
-        recordHelper.lister =new AppStartRecordHelper.OnRecordLister() {
+        recordHelper.lister = new AppStartRecordHelper.OnRecordLister() {
             @Override
             public void onUpdate() {
                 if (AppService.this.ondata != null) {
@@ -87,10 +77,9 @@ public class AppService extends Service {
         }
         String action = intent.getStringExtra("action1");
         String packageName = intent.getStringExtra("name");
-        if (action == null||packageName==null) {
+        if (action == null || packageName == null) {
 //            appInfoHelper.startLoadAppInfo();
-        }
-        else {
+        } else {
             if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
                 if (!appInfoHelper.isAppExist(packageName)) {
                     appInfoHelper.add(packageName);
@@ -116,5 +105,22 @@ public class AppService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    /**
+     * 只作为通知，具体数据保存在各种的helper类里面
+     */
+    public interface Ondata {
+        void onAppinfo(List<AppInfo> list);
+
+        void onAppinfoChanged();
+
+        void onrecodeUpdate();
+    }
+
+    public class MYBinder extends Binder {
+        public AppService getserver() {
+            return AppService.this;
+        }
     }
 }

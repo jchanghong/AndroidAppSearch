@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jchanghong.appsearch.R;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.util.ViewUtil;
@@ -18,8 +19,10 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
     private final Context mContext;
     private final int mTextViewResourceId;
     private final List<AppInfo> mAppInfos;
-/**
- * 保护copy*/
+
+    /**
+     * 保护copy
+     */
     public AppInfoAdapter(Context context,
                           List<AppInfo> appInfos) {
         super(context, R.layout.app_info_grid_item, appInfos);

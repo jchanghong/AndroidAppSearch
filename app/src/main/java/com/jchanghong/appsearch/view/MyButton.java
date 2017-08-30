@@ -18,8 +18,8 @@ public class MyButton extends LinearLayout {
         LinearLayout root;
         root = (LinearLayout) inflater.inflate(R.layout.mybutton,
                 this);
-          TextView textViewnumber;
-          TextView textchars;
+        TextView textViewnumber;
+        TextView textchars;
         textViewnumber = root.findViewById(R.id.textview_number);
         textchars = root.findViewById(R.id.textView_chars);
         tag = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "tag");
