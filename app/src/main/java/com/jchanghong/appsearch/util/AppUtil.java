@@ -22,7 +22,7 @@ import com.jchanghong.appsearch.service.AppService;
 import java.util.Collections;
 
 public class AppUtil {
-    private static final String TAG = "AppUtil";
+    private static final String TAG = AppUtil.class.getSimpleName();
 
     /**
      * Return true when start app success,otherwise return false.
@@ -94,10 +94,6 @@ public class AppUtil {
      */
     public static boolean startApp(Context context, AppInfo appInfo) {
         boolean startAppSuccess = false;
-        if ((null == context) || (null == appInfo)) {
-            return false;
-        }
-
         if (!appInfo.getPackageName().equals(context.getPackageName())) {
             startAppSuccess = AppUtil.startApp(context, appInfo.getPackageName(),
                     appInfo.getName());
@@ -109,10 +105,8 @@ public class AppUtil {
                 AppStartRecord appStartRecord = new AppStartRecord(appInfo.getKey(),
                         startTimeMs);
                 AppService service = (AppService) context;
-                service.recordHelper.helper.insert(appStartRecord);
-                if (service.recordHelper.mrecords != null) {
-                    service.recordHelper.mrecords.addFirst(appInfo.getKey());
-                }
+                service.recordHelper.indert(appStartRecord);
+                service.recordHelper.startLoadAppStartRecord();
 //                            AppInfo ai = AppInfoHelper.mInstance.mBaseAllAppInfosHashMap
 //                                    .get(appInfo.getKey());
 //                            if (null != ai) {
@@ -129,8 +123,6 @@ public class AppUtil {
             Toast.makeText(context, R.string.the_app_has_been_launched, Toast.LENGTH_SHORT)
                     .show();
         }
-
-
         return startAppSuccess;
     }
 
@@ -155,21 +147,6 @@ public class AppUtil {
 
         return canLaunchTheMainActivity;
     }
-
-    /**
-     * uninstall app via package name
-     *
-     * @param context
-     * @param packageName
-     */
-    private static void uninstallApp(Context context, String packageName) {
-        Uri packageUri = Uri.parse("package:" + packageName);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_DELETE);
-        intent.setData(packageUri);
-        context.startActivity(intent);
-    }
-
     /**
      * uninstall app via appInfo
      *
@@ -177,66 +154,25 @@ public class AppUtil {
      * @param appInfo
      */
     public static void uninstallApp(Context context, AppInfo appInfo) {
-        if ((null == context) || (null == appInfo)) {
-            return;
-        }
-
-        if (null != appInfo) {
             if (!appInfo.getPackageName().equals(context.getPackageName())) {
-                AppUtil.uninstallApp(context, appInfo.getPackageName());
+                Uri packageUri = Uri.parse("package:" + appInfo.getPackageName());
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DELETE);
+                intent.setData(packageUri);
+                context.startActivity(intent);
             } else {
                 Toast.makeText(context, R.string.can_not_to_uninstall_yourself, Toast.LENGTH_SHORT)
                         .show();
             }
-        }
     }
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private static void viewApp(Context context, String packageName) {
+
+    public static void viewApp(Context context, AppInfo appInfo) {
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse("package:" + packageName));
+        intent.setData(Uri.parse("package:" + appInfo.getPackageName()));
         intent.putExtra("cmp", "com.android.settings/.applications.InstalledAppDetails");
         intent.addCategory("android.intent.category.DEFAULT");
         context.startActivity(intent);
-    }
-
-    public static void viewApp(Context context, AppInfo appInfo) {
-        if ((null == context) || (null == appInfo)) {
-            return;
-        }
-
-        if (null != appInfo) {
-            AppUtil.viewApp(context, appInfo.getPackageName());
-
-        }
-    }
-
-    /**
-     * get version name via package name
-     *
-     * @param context
-     * @param packageName
-     * @return
-     */
-    public static String getVersionName(Context context, String packageName) {
-        String versionName = null;
-        do {
-            if ((null == context) || TextUtils.isEmpty(packageName)) {
-                break;
-            }
-            PackageManager pm = context.getPackageManager();
-            try {
-                PackageInfo pi = pm.getPackageInfo(packageName, 0);
-                versionName = pi.versionName;
-            } catch (NameNotFoundException e) {
-
-                e.printStackTrace();
-                break;
-            }
-
-        } while (false);
-
-        return versionName;
     }
 }

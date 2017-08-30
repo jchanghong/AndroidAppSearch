@@ -8,7 +8,6 @@ import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
-import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
 import com.jchanghong.appsearch.model.AppInfo;
 import com.jchanghong.appsearch.model.AppInfo.SearchByType;
 import com.jchanghong.appsearch.model.Constant;
@@ -217,21 +216,21 @@ public class AppInfoHelper {
             ai.setMatchStartIndex(-1);
             ai.setMatchLength(0);
         }
-        if (mContext.recordHelper.mrecords == null) {
-            mT9SearchAppInfos.addAll(baseAppInfos);
-            mFirstNoT9SearchResultInput.delete(0, mFirstNoT9SearchResultInput.length());
-            Collections.sort(mT9SearchAppInfos, AppInfo.mSortByDefault);
-            return;
-        }
-        LinkedHashSet set = new LinkedHashSet();
-        LinkedList<String> mrecords = mContext.recordHelper.mrecords;
-        for (String mrecord : mrecords) {
-            AppInfo o = mBaseAllAppInfosHashMap.get(mrecord);
-            //noinspection unchecked
-            set.add(o);
-        }
-        //noinspection unchecked
-        set.addAll(mBaseAllAppInfos);
+//        if (mContext.recordHelper.mrecords == null) {
+//            mT9SearchAppInfos.addAll(baseAppInfos);
+//            mFirstNoT9SearchResultInput.delete(0, mFirstNoT9SearchResultInput.length());
+//            Collections.sort(mT9SearchAppInfos, AppInfo.mSortByDefault);
+//            return;
+//        }
+//        LinkedHashSet set = new LinkedHashSet();
+//        LinkedList<String> mrecords = mContext.recordHelper.mrecords;
+//        for (String mrecord : mrecords) {
+//            AppInfo o = mBaseAllAppInfosHashMap.get(mrecord);
+//            //noinspection unchecked
+//            set.add(o);
+//        }
+//        //noinspection unchecked
+//        set.addAll(mBaseAllAppInfos);
 //        MainActivity.mAppInfoAdapter.setmAppInfos(set.toArray());
     }
 
@@ -290,8 +289,7 @@ public class AppInfoHelper {
                 return resetSequenceSuccess;
             }
 
-        mContext.recordHelper.helper.delete(appInfo.getKey());
-
+        mContext.recordHelper.remove(appInfo.getPackageName());
             if (mBaseAllAppInfosHashMap.containsKey(appInfo.getKey())) {
                 mBaseAllAppInfosHashMap.get(appInfo.getKey()).setCommonWeights(AppCommonWeightsUtil.COMMON_WEIGHTS_DEFAULT);
                 Collections.sort(mBaseAllAppInfos, AppInfo.mSortByDefault);
@@ -331,7 +329,7 @@ public class AppInfoHelper {
             }
         }
         mBaseAllAppInfos.remove(appInfo);
-                    mContext.recordHelper.helper.delete(appInfo.getKey());
+        mContext.recordHelper.remove(appInfo.getPackageName());
                     mBaseAllAppInfosHashMap.remove(appInfo.getKey());
         return true;
     }

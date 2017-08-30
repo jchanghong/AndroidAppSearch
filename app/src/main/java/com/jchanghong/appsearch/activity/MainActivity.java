@@ -52,9 +52,7 @@ public class MainActivity extends Activity
     }
 
     private void initAfterServer() {
-        if (service.recordHelper.mrecords == null) {
             service.recordHelper.startLoadAppStartRecord();
-        }
         if (!service.appInfoHelper.loaded()) {
             service.appInfoHelper.startLoadAppInfo();
         }
@@ -216,6 +214,18 @@ public class MainActivity extends Activity
 
     @Override
     public void onrecode(List<AppStartRecord> list) {
-
+        Log.i(debug, "onrecode:" + list.toString());
+        List<AppInfo> recodeinfo = new ArrayList<>();
+        for (AppStartRecord appStartRecord : list) {
+            for (AppInfo mBaseAllAppInfo : service.appInfoHelper.mBaseAllAppInfos) {
+                if (mBaseAllAppInfo.getPackageName().equals(appStartRecord.packet_name)) {
+                    recodeinfo.add(mBaseAllAppInfo);
+                    break;
+                }
+            }
+        }
+        service.appInfoHelper.mBaseAllAppInfos.removeAll(recodeinfo);
+        service.appInfoHelper.mBaseAllAppInfos.addAll(0, recodeinfo);
+        search("");
     }
 }
