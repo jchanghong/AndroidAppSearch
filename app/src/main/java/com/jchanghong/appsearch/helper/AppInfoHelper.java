@@ -72,6 +72,9 @@ public class AppInfoHelper {
             boolean canLaunchTheMainActivity = AppUtil.appCanLaunchTheMainActivity(mContext, ri.activityInfo.packageName);
             if (canLaunchTheMainActivity) {
                 AppInfo appInfo = getAppInfo(pm, ri);
+                if (appInfo.mPackageName.equals(context.getPackageName())) {
+                    break;
+                }
                 if (!TextUtils.isEmpty(appInfo.mLabel)) {
                     PinyinUtil.parse(appInfo.mLabelPinyinSearchUnit);
                     appInfos.add(appInfo);

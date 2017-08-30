@@ -35,12 +35,14 @@ public class AppService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.i(LOG, "onbind---------");
         // TODO Auto-generated method stub
         return new MYBinder();
     }
 
     @Override
     public void onCreate() {
+        Log.i(LOG, "oncreate------");
         super.onCreate();
         AppInfoHelper.OnAppInfoLoad onAppInfoLoad = new AppInfoHelper.OnAppInfoLoad() {
             @Override
@@ -68,6 +70,7 @@ public class AppService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i(LOG, "onStartCommand");
         if (intent == null) {
             return START_STICKY;
         }

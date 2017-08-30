@@ -42,6 +42,7 @@ public class MainActivity extends Activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(debug, "oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mT9SearchGv = findViewById(R.id.t9_search_grid_view);
@@ -65,6 +66,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onBackPressed() {
+        Log.i(debug, "onbackpredded");
         runInBackgroud();
     }
 
@@ -83,6 +85,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onResume() {
+        Log.i(debug, "onresume--------");
         super.onResume();
         mT9TelephoneDialpadView.mT9InputEt.setText("");
 //        refreshT9SearchGv();
@@ -113,6 +116,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onInputTextChanged(String curCharacter) {
+        Log.i(debug, "oninputchanges---------");
         if (service == null) {
             return;
         }
@@ -133,6 +137,7 @@ public class MainActivity extends Activity
 
     @Override
     protected void onDestroy() {
+        Log.i(debug, "ondestroy");
         super.onDestroy();
         unbindService(this);
     }
@@ -147,6 +152,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        Log.i(debug, "onServiceConnected");
         service = ((AppService.MYBinder) iBinder).getserver();
         service.ondata = this;
         mAppInfoAdapter = new AppInfoAdapter(this, new ArrayList<>(service.appInfoHelper.mBaseAllAppInfos));
@@ -157,11 +163,13 @@ public class MainActivity extends Activity
 
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
+        Log.i(debug, "onServiceDisconnected");
         service = null;
     }
 
     @Override
     public void onAppinfo(List<AppInfo> list) {
+        Log.i(debug, "onAppinfo-");
         initnumber--;
         if (initnumber == 0) {
             showinitview();
@@ -191,6 +199,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onrecodeUpdate() {
+        Log.i(debug, "onrecodeUpdate");
         initnumber--;
         if (initnumber == 0) {
             showinitview();
