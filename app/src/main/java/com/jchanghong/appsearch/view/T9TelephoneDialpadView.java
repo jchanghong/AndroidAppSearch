@@ -16,7 +16,7 @@ import com.jchanghong.appsearch.R;
 public class T9TelephoneDialpadView extends LinearLayout implements
         OnClickListener {
 
-    public EditText mT9InputEt;//输入框
+    public final EditText mT9InputEt;//输入框
     public OntextChangedlister ontextChangedlister = null;//监听器
 
     public T9TelephoneDialpadView(Context context, AttributeSet attrs) {

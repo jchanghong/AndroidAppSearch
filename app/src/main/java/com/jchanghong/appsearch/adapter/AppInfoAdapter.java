@@ -60,6 +60,7 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfo> {
             viewHolder = (ViewHolder) view.getTag();
         }
 
+        assert appInfo != null;
         viewHolder.mIconIv.setBackground(appInfo.mIcon);
         switch (appInfo.mSearchByType) {
             case SearchByLabel:

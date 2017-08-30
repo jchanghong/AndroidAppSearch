@@ -53,11 +53,10 @@ public class AppUtil {
 
     /**
      * start app via appinfo入口
-     *
-     * @param context
+     *  @param context
      * @param appInfo
      */
-    public static boolean startApp(Context context, AppInfo appInfo) {
+    public static void startApp(Context context, AppInfo appInfo) {
         boolean startAppSuccess = false;
         if (!appInfo.mPackageName.equals(context.getPackageName())) {
             startAppSuccess = AppUtil.startApp(context, appInfo.mPackageName,
@@ -77,7 +76,7 @@ public class AppUtil {
             Toast.makeText(context, R.string.the_app_has_been_launched, Toast.LENGTH_SHORT)
                     .show();
         }
-        return startAppSuccess;
+        return ;
     }
 
     /**

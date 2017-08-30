@@ -8,7 +8,7 @@ import com.pinyinsearch.util.T9Util;
  * Created by jiang ontextChangedlister 2017/8/30 0030.
  */
 
-public class T9search {
+class T9search {
     public static void main(String[] args) {
         PinyinSearchUnit unit = new PinyinSearchUnit("clock");
         System.out.println(T9Util.getT9Number('c'));

@@ -22,12 +22,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AppInfoHelper {
-    public List<AppInfo> mT9SearchAppInfos = new ArrayList<>();
-    public List<AppInfo> mBaseAllAppInfos = new ArrayList<>();
-    public HashMap<String, AppInfo> mBaseAllAppInfosHashMap = new HashMap<>();
-    private AppService mContext;
-    private OnAppInfoLoad mOnAppInfoLoad;//回调
-    private StringBuilder mFirstNoT9SearchResultInput = new StringBuilder();
+    public final List<AppInfo> mT9SearchAppInfos = new ArrayList<>();
+    public final List<AppInfo> mBaseAllAppInfos = new ArrayList<>();
+    private final HashMap<String, AppInfo> mBaseAllAppInfosHashMap = new HashMap<>();
+    private final AppService mContext;
+    private final OnAppInfoLoad mOnAppInfoLoad;//回调
+    private final StringBuilder mFirstNoT9SearchResultInput = new StringBuilder();
     private volatile boolean mloading = false;
 
     public AppInfoHelper(AppService mContext, OnAppInfoLoad load) {
@@ -72,9 +72,7 @@ public class AppInfoHelper {
             boolean canLaunchTheMainActivity = AppUtil.appCanLaunchTheMainActivity(mContext, ri.activityInfo.packageName);
             if (canLaunchTheMainActivity) {
                 AppInfo appInfo = getAppInfo(pm, ri);
-                if (TextUtils.isEmpty(appInfo.mLabel)) {
-                    continue;
-                } else {
+                if (!TextUtils.isEmpty(appInfo.mLabel)) {
                     PinyinUtil.parse(appInfo.mLabelPinyinSearchUnit);
                     appInfos.add(appInfo);
                 }
@@ -104,12 +102,11 @@ public class AppInfoHelper {
             PinyinSearchUnit labelPinyinSearchUnit = baseAppInfo.mLabelPinyinSearchUnit;
             boolean match = T9Util.match(labelPinyinSearchUnit, search);
             if (match) {// search by LabelPinyinUnits;
-                AppInfo appInfo = baseAppInfo;
-                appInfo.mSearchByType = SearchByType.SearchByLabel;
-                appInfo.setMatchKeywords(labelPinyinSearchUnit.getMatchKeyWord().toString());
-                appInfo.mMatchStartIndex = (appInfo.mLabel.indexOf(appInfo.mMatchKeywords.toString()));
-                appInfo.mMatchLength = (appInfo.mMatchKeywords.length());
-                mT9SearchAppInfos.add(appInfo);
+                baseAppInfo.mSearchByType = SearchByType.SearchByLabel;
+                baseAppInfo.setMatchKeywords(labelPinyinSearchUnit.getMatchKeyWord().toString());
+                baseAppInfo.mMatchStartIndex = (baseAppInfo.mLabel.indexOf(baseAppInfo.mMatchKeywords.toString()));
+                baseAppInfo.mMatchLength = (baseAppInfo.mMatchKeywords.length());
+                mT9SearchAppInfos.add(baseAppInfo);
             }
         }
 
@@ -144,8 +141,7 @@ public class AppInfoHelper {
         return appExist;
     }
 
-    public boolean add(String packageName) {
-        boolean addSuccess = false;
+    public void add(String packageName) {
         boolean canLaunchTheMainActivity = AppUtil.appCanLaunchTheMainActivity(mContext, packageName);
 
         if (canLaunchTheMainActivity) {
@@ -157,48 +153,34 @@ public class AppInfoHelper {
             if (null != resolveInfo) {
                 AppInfo appInfo = getAppInfo(pm, resolveInfo);
                 if (TextUtils.isEmpty(appInfo.mLabel)) {
-                    addSuccess = false;
-                    return addSuccess;
+                    return;
                 }
                 mBaseAllAppInfosHashMap.put(appInfo.mPackageName, appInfo);
                 mBaseAllAppInfos.add(appInfo);
                 Collections.sort(mBaseAllAppInfos, AppInfo.mSortByTime);
-                addSuccess = true;
             }
         }
 
-        return addSuccess;
     }
 
 
-    public boolean remove(String packageName) {
+    public void remove(String packageName) {
         AppInfo v = mBaseAllAppInfosHashMap.remove(packageName);
         if (v != null) {
             mBaseAllAppInfos.remove(v);
         }
         mContext.recordHelper.remove(packageName);
-        return true;
     }
 
-    /**
-     * 加载过
-     */
-    public boolean loaded() {
-        return mBaseAllAppInfos != null && mBaseAllAppInfos.size() > 0;
-    }
 
     private AppInfo getAppInfo(PackageManager pm, ResolveInfo resolveInfo) {
-        AppInfo appInfo = new AppInfo(resolveInfo.loadLabel(pm).toString(), resolveInfo.loadIcon(pm), resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name);
-        return appInfo;
+        return new AppInfo(resolveInfo.loadLabel(pm).toString(), resolveInfo.loadIcon(pm), resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name);
 
     }
 
     private void parseAppInfo(List<AppInfo> appInfos) {
 //		Log.i(TAG, "parseAppInfo");
         if (null == appInfos || appInfos.size() < 1) {
-            if (null != mOnAppInfoLoad) {
-                mOnAppInfoLoad.onAppInfoLoadFailed();
-            }
             return;
         }
 
@@ -220,6 +202,5 @@ public class AppInfoHelper {
     public interface OnAppInfoLoad {
         void onAppInfoLoadSuccess(List<AppInfo> list);
 
-        void onAppInfoLoadFailed();
     }
 }

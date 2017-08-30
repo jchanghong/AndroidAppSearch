@@ -3,7 +3,7 @@ package com.jchanghong.appsearch.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-public class SQLiteOpenHelper extends android.database.sqlite.SQLiteOpenHelper {
+class SQLiteOpenHelper extends android.database.sqlite.SQLiteOpenHelper {
     private static final String CREATE_APP_START_RECORD_TABLE = "create table "
             + Database.Table.APP_START_RECORD_TABLE
             + "("
@@ -17,7 +17,7 @@ public class SQLiteOpenHelper extends android.database.sqlite.SQLiteOpenHelper {
                 Database.DB_VERSION);
     }
 
-    public static SQLiteOpenHelper getInstance(Context context) {
+    static SQLiteOpenHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx

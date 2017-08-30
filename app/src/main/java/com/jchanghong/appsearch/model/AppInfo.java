@@ -14,8 +14,7 @@ public class AppInfo extends BaseAppInfo {
             if (compareMatchStartIndex != 0) {
                 return compareMatchStartIndex;
             }
-            int compareMatchLength = rhs.mMatchLength - lhs.mMatchLength;
-            return compareMatchLength;
+            return rhs.mMatchLength - lhs.mMatchLength;
         }
     };
     //    private static final Comparator<Object> mChineseComparator = Collator.getInstance(Locale.CHINA);
@@ -26,13 +25,13 @@ public class AppInfo extends BaseAppInfo {
         }
     };
 
-    public String mkey; // as the sort key word
-    public PinyinSearchUnit mLabelPinyinSearchUnit;// save the mLabel converted to Pinyin characters.
+    public final String mkey; // as the sort key word
+    public final PinyinSearchUnit mLabelPinyinSearchUnit;// save the mLabel converted to Pinyin characters.
     public SearchByType mSearchByType; // Used to save the type of search
-    public StringBuilder mMatchKeywords;// Used to save the type of Match Keywords.(label)
+    public final StringBuilder mMatchKeywords;// Used to save the type of Match Keywords.(label)
     public int mMatchStartIndex = -1;        //the match start  position of mMatchKeywords in original string(label).
     public int mMatchLength = 0;            //the match length of mMatchKeywords in original string(name or phoneNumber).
-    public long mstartTime = 0l;
+    public long mstartTime = 0L;
 
     public AppInfo(String label, Drawable icon, String packageName, String name) {
         super(label, icon, packageName, name);

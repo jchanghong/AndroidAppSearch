@@ -16,7 +16,7 @@ import java.util.List;
 public class AppService extends Service {
     private static final String ACTION_X_DESKTOP_HELPER_SERVICE = "com.jchanghong.appsearch.service.X_DESKTOP_HELPER_SERVICE";
 
-    private static String LOG = AppService.class.getSimpleName();
+    private static final String LOG = AppService.class.getSimpleName();
     public AppInfoHelper appInfoHelper;
     public AppStartRecordHelper recordHelper;
     public Ondata ondata;
@@ -50,10 +50,6 @@ public class AppService extends Service {
                 }
             }
 
-            @Override
-            public void onAppInfoLoadFailed() {
-
-            }
         };
         appInfoHelper = new AppInfoHelper(this, onAppInfoLoad);
         recordHelper = new AppStartRecordHelper(this);
@@ -77,34 +73,32 @@ public class AppService extends Service {
         }
         String action = intent.getStringExtra("action1");
         String packageName = intent.getStringExtra("name");
-        if (action == null || packageName == null) {
-//            appInfoHelper.startLoadAppInfo();
-        } else {
-            if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
-                if (!appInfoHelper.isAppExist(packageName)) {
-                    appInfoHelper.add(packageName);
+        if (action !=null || packageName != null) {
+            assert action != null;
+            switch (action) {
+                case Intent.ACTION_PACKAGE_ADDED:
+                    if (!appInfoHelper.isAppExist(packageName)) {
+                        appInfoHelper.add(packageName);
+                        if (ondata != null) {
+                            ondata.onAppinfoChanged();
+                        }
+                    }
+                    break;
+                case Intent.ACTION_PACKAGE_CHANGED:
+//           appInfoHelper.startLoadAppInfo();
                     if (ondata != null) {
                         ondata.onAppinfoChanged();
                     }
-                }
-            } else if (action.equals(Intent.ACTION_PACKAGE_CHANGED)) {
-//           appInfoHelper.startLoadAppInfo();
-                if (ondata != null) {
-                    ondata.onAppinfoChanged();
-                }
-            } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
-                appInfoHelper.remove(packageName);
-                if (ondata != null) {
-                    ondata.onAppinfoChanged();
-                }
+                    break;
+                case Intent.ACTION_PACKAGE_REMOVED:
+                    appInfoHelper.remove(packageName);
+                    if (ondata != null) {
+                        ondata.onAppinfoChanged();
+                    }
+                    break;
             }
         }
         return START_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     /**

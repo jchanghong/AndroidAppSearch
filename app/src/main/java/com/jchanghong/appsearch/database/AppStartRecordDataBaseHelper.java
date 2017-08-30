@@ -13,12 +13,12 @@ import java.util.List;
 
 
 public class AppStartRecordDataBaseHelper {
-    static private String[] appStartRecordColumns = {
+    static private final String[] appStartRecordColumns = {
             Database.AppStartRecordColumns.PACKET_NAME,
             Database.AppStartRecordColumns.START_TIME,
 
     };
-    private SQLiteOpenHelper sqLiteOpenHelper;
+    private final SQLiteOpenHelper sqLiteOpenHelper;
 
     public AppStartRecordDataBaseHelper(AppService service) {
         sqLiteOpenHelper = SQLiteOpenHelper.getInstance(service.getApplicationContext());
@@ -26,8 +26,7 @@ public class AppStartRecordDataBaseHelper {
         db.close();
     }
 
-    public boolean insert(AppStartRecord appStartRecord) {
-        boolean insertSuccess = false;
+    public void insert(AppStartRecord appStartRecord) {
         SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
         if (null != db) {
             String whereClause = Database.AppStartRecordColumns.PACKET_NAME + " =?";
@@ -38,17 +37,13 @@ public class AppStartRecordDataBaseHelper {
             conferenceMemberValues.put(Database.AppStartRecordColumns.START_TIME, appStartRecord.mStartTime);
             db.insert(Database.Table.APP_START_RECORD_TABLE, null, conferenceMemberValues);
             db.close();
-            insertSuccess = true;
         }
-        return insertSuccess;
     }
 
     /*start: delete*/
-    public boolean delete(String packet_neme) {
-        boolean deleteSuccess = false;
+    public void delete(String packet_neme) {
         if (TextUtils.isEmpty(packet_neme)) {
-            deleteSuccess = false;
-            return deleteSuccess;
+            return;
         }
         SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
         if (null != db) {
@@ -56,9 +51,7 @@ public class AppStartRecordDataBaseHelper {
             String[] whereArgs = new String[]{packet_neme};
             db.delete(Database.Table.APP_START_RECORD_TABLE, whereClause, whereArgs);
             db.close();
-            deleteSuccess = true;
         }
-        return deleteSuccess;
     }
 
     /**

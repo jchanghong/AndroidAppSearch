@@ -10,20 +10,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//import android.util.Log;
 
 /**
  * 数据库中的记录
  */
 public class AppStartRecordHelper {
-    public Map<String, AppStartRecord> cache = new HashMap<>();
+    public final Map<String, AppStartRecord> cache = new HashMap<>();
     public OnRecordLister lister;
-    private AppStartRecordDataBaseHelper helper;
-    private AppService service;
+    private final AppStartRecordDataBaseHelper helper;
     private volatile boolean mloading = false;
 
     public AppStartRecordHelper(AppService appService) {
-        service = appService;
         helper = new AppStartRecordDataBaseHelper(appService);
     }
 
@@ -36,8 +33,7 @@ public class AppStartRecordHelper {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                final AppStartRecord record1 = record;
-                helper.insert(record1);
+                helper.insert(record);
                 return null;
             }
         }.execute();
@@ -52,8 +48,7 @@ public class AppStartRecordHelper {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                final String record1 = pcname;
-                helper.delete(record1);
+                helper.delete(pcname);
                 return null;
             }
         }.execute();

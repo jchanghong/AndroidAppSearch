@@ -33,13 +33,12 @@ import java.util.List;
 public class MainActivity extends Activity
         implements
         T9TelephoneDialpadView.OntextChangedlister, ServiceConnection, AppService.Ondata {
-    private static String debug = MainActivity.class.getName();
+    private static final String debug = MainActivity.class.getName();
     private int initnumber = 2;//需要init的数量，当iniitnumber=0的时候就显示最后的数据，不然代表有异步任务没有完成
     private GridView mT9SearchGv;
     private AppInfoAdapter mAppInfoAdapter;
     private T9TelephoneDialpadView mT9TelephoneDialpadView;
     private AppService service;
-    private List<AppInfo> empty = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,10 +197,10 @@ public class MainActivity extends Activity
         }
     }
 
-    class OnitemlongClick implements PopupMenu.OnMenuItemClickListener {
-        AppInfo info;
+    private class OnitemlongClick implements PopupMenu.OnMenuItemClickListener {
+        final AppInfo info;
 
-        public OnitemlongClick(AppInfo appInfo) {
+        OnitemlongClick(AppInfo appInfo) {
             info = appInfo;
         }
 
