@@ -2,7 +2,7 @@ package com.jchanghong.appsearch.database;
 
 import android.provider.BaseColumns;
 
-class XDesktopHelperDatabase {
+class Database {
     public static final String DB_NAME = "xdesktophelper.db";
     public static final int DB_VERSION = 2;
 

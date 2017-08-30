@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class AppStartRecordDataBaseHelper {
-    public XDesktopHelperSQLiteOpenHelper mXDesktopHelperSQLiteOpenHelper;
+    public SQLiteOpenHelper mXDesktopHelperSQLiteOpenHelper;
 
 
     public AppStartRecordDataBaseHelper() {
@@ -38,10 +38,10 @@ public class AppStartRecordDataBaseHelper {
                 ContentValues conferenceMemberValues = new ContentValues();
                 for (AppStartRecord asr : appStartRecords) {
                     conferenceMemberValues.clear();
-                    conferenceMemberValues.put(XDesktopHelperDatabase.AppStartRecordColumns.KEY, asr.getKey());
-                    conferenceMemberValues.put(XDesktopHelperDatabase.AppStartRecordColumns.START_TIME, asr.getStartTime());
+                    conferenceMemberValues.put(Database.AppStartRecordColumns.KEY, asr.getKey());
+                    conferenceMemberValues.put(Database.AppStartRecordColumns.START_TIME, asr.getStartTime());
 
-                    db.insert(XDesktopHelperDatabase.Table.AppStartRecord.APP_START_RECORD_TABLE, null, conferenceMemberValues);
+                    db.insert(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, null, conferenceMemberValues);
                 }
                 db.close();
                 insertSuccess = true;
@@ -79,9 +79,9 @@ public class AppStartRecordDataBaseHelper {
 
             SQLiteDatabase db = mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
             if (null != db) {
-                String whereClause = XDesktopHelperDatabase.AppStartRecordColumns.KEY + " =?";
+                String whereClause = Database.AppStartRecordColumns.KEY + " =?";
                 String[] whereArgs = new String[]{key};
-                db.delete(XDesktopHelperDatabase.Table.AppStartRecord.APP_START_RECORD_TABLE, whereClause, whereArgs);
+                db.delete(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, whereClause, whereArgs);
                 db.close();
                 deleteSuccess = true;
             }
@@ -102,9 +102,9 @@ public class AppStartRecordDataBaseHelper {
 
             SQLiteDatabase db = mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
             if (null != db) {
-                String whereClause = XDesktopHelperDatabase.AppStartRecordColumns.KEY + " =?";
+                String whereClause = Database.AppStartRecordColumns.KEY + " =?";
                 String[] whereArgs = new String[]{appStartRecord.getKey()};
-                db.delete(XDesktopHelperDatabase.Table.AppStartRecord.APP_START_RECORD_TABLE, whereClause, whereArgs);
+                db.delete(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, whereClause, whereArgs);
                 db.close();
                 deleteSuccess = true;
             }
@@ -120,7 +120,7 @@ public class AppStartRecordDataBaseHelper {
         do {
             SQLiteDatabase db = mXDesktopHelperSQLiteOpenHelper.getWritableDatabase();
             if (null != db) {
-                db.delete(XDesktopHelperDatabase.Table.AppStartRecord.APP_START_RECORD_TABLE, null, null);
+                db.delete(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, null, null);
                 db.close();
                 deleteSuccess = true;
             }
@@ -142,14 +142,14 @@ public class AppStartRecordDataBaseHelper {
         }
 
         String[] appStartRecordColumns = {
-                XDesktopHelperDatabase.AppStartRecordColumns.KEY,
-                XDesktopHelperDatabase.AppStartRecordColumns.START_TIME,
+                Database.AppStartRecordColumns.KEY,
+                Database.AppStartRecordColumns.START_TIME,
 
         };
 
-//            String appStartRecordOrderBy=XDesktopHelperDatabase.AppStartRecordColumns.KEY+" ASC";//" DESC";
-        String appStartRecordOrderBy = XDesktopHelperDatabase.AppStartRecordColumns.START_TIME + " DESC";//" DESC";
-        Cursor appStartRecordCursor = db.query(XDesktopHelperDatabase.Table.AppStartRecord.APP_START_RECORD_TABLE, appStartRecordColumns, null, null, null, null, appStartRecordOrderBy);
+//            String appStartRecordOrderBy=Database.AppStartRecordColumns.KEY+" ASC";//" DESC";
+        String appStartRecordOrderBy = Database.AppStartRecordColumns.START_TIME + " DESC";//" DESC";
+        Cursor appStartRecordCursor = db.query(Database.Table.AppStartRecord.APP_START_RECORD_TABLE, appStartRecordColumns, null, null, null, null, appStartRecordOrderBy);
         if (null != appStartRecordCursor) {
             int keyColumnIndex = appStartRecordCursor.getColumnIndex(appStartRecordColumns[0]);
             int startTimeColumnIndex = appStartRecordCursor.getColumnIndex(appStartRecordColumns[1]);

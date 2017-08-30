@@ -3,7 +3,7 @@ package com.jchanghong.appsearch.helper;
 import android.os.AsyncTask;
 
 import com.jchanghong.appsearch.database.AppStartRecordDataBaseHelper;
-import com.jchanghong.appsearch.database.XDesktopHelperSQLiteOpenHelper;
+import com.jchanghong.appsearch.database.SQLiteOpenHelper;
 import com.jchanghong.appsearch.model.AppStartRecord;
 import com.jchanghong.appsearch.service.AppService;
 
@@ -29,7 +29,7 @@ public class AppStartRecordHelper {
     public AppStartRecordHelper(AppService appService) {
         service = appService;
         helper = new AppStartRecordDataBaseHelper();
-        helper.mXDesktopHelperSQLiteOpenHelper = XDesktopHelperSQLiteOpenHelper.getInstance(service);
+        helper.mXDesktopHelperSQLiteOpenHelper = SQLiteOpenHelper.getInstance(service);
     }
     private void onAppStartRecordSuccess() {
         mrecords = new LinkedList<>();
