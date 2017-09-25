@@ -21,7 +21,10 @@ public class AppInfo extends BaseAppInfo {
     public static final Comparator<AppInfo> mSortByTime = new Comparator<AppInfo>() {
         @Override
         public int compare(AppInfo lhs, AppInfo rhs) {
-            return (int) (rhs.mstartTime - lhs.mstartTime);
+            if (lhs.mstartTime == rhs.mstartTime) {
+                return 0;
+            }
+            return (rhs.mstartTime - lhs.mstartTime) > 0 ? 1 : -1;
         }
     };
 

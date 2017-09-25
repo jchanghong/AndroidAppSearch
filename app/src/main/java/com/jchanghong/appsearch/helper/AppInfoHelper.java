@@ -20,8 +20,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
+/*
+* 单例，从server里面获取
+* */
 public class AppInfoHelper {
+    public static boolean iniSort = false;//mbaseall 已经经过排序过！！！
     public final List<AppInfo> mT9SearchAppInfos = new ArrayList<>();//搜索用，搜索排序
     public final List<AppInfo> mBaseAllAppInfos = new ArrayList<>();//全部列表，启动时间排序
     private final HashMap<String, AppInfo> mBaseAllAppInfosHashMap = new HashMap<>();

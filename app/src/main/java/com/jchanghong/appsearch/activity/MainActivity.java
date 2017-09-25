@@ -5,9 +5,11 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.icu.text.IDNA;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -189,6 +191,16 @@ public class MainActivity extends Activity
     @Override
     public void onrecodeUpdate() {
 //        Log.i(debug, "onrecodeUpdate");
+
+        if (service.appInfoHelper.mBaseAllAppInfos.size() > 0) {
+            for (AppInfo appInfo : service.appInfoHelper.mBaseAllAppInfos) {
+                AppStartRecord record = service.recordHelper.cache.get(appInfo.mPackageName);
+                if (record != null) {
+                    appInfo.mstartTime = record.mStartTime;
+                }
+            }
+            Collections.sort(service.appInfoHelper.mBaseAllAppInfos, AppInfo.mSortByTime);
+        }
         initnumber--;
         if (initnumber == 0) {
             showinitview();

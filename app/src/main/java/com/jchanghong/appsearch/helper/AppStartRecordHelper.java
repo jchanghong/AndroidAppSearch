@@ -13,6 +13,7 @@ import java.util.Map;
 
 /**
  * 数据库中的记录
+ * 单例
  */
 public class AppStartRecordHelper {
     public final Map<String, AppStartRecord> cache = new HashMap<>();
